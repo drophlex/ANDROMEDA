@@ -49,7 +49,16 @@ jobs:
           name: ANDROMEDA 1.0.${{ github.run_number }} for Mac (VST3 · AU · App)
           prerelease: false
           make_latest: true
-          files: ANDROMEDA-mac.zip
+          files: |
+            ANDROMEDA-mac.zip
+            manual/ANDROMEDA-Manual-Completo-EN-ES.pdf
+            manual/ANDROMEDA-Manual-Completo-ES.pdf
+            manual/ANDROMEDA-Manual-EN-ES.pdf
+            manual/ANDROMEDA-Manual-ES.pdf
+            manual/ANDROMEDA-FM1-Manual-EN-ES.pdf
+            manual/ANDROMEDA-FM1-Manual-ES.pdf
           body: |
             ANDROMEDA — an ambient instrument · Dark Funk Durcal design · Polaris Sound Lab
-            Download ANDROMEDA-mac.zip, unzip it and double-click "Install ANDROMEDA.command".
+            Download ANDROMEDA-mac.zip, unzip it and double-click "Install ANDROMEDA.command" (or paste in Terminal: curl -fsSL https://drophlex.github.io/ANDROMEDA/install.sh | bash).
+            Manuals / Manuales (PDF): ANDROMEDA-Manual-Completo-EN-ES.pdf is the complete manual in English and Spanish (web, Mac, Ableton and FM-1); ANDROMEDA-Manual-Completo-ES.pdf, solo en español.
+            Quick guide / Guía rápida: https://drophlex.github.io/ANDROMEDA/guide/
