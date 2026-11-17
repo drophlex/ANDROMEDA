@@ -10,7 +10,9 @@ Dark Funk Durcal design · Polaris Sound Lab
 curl -fsSL https://drophlex.github.io/ANDROMEDA/install.sh | bash
 ```
 
-📖 **Manual (PDF):** [English + Español](manual/ANDROMEDA-Manual-EN-ES.pdf) · [Solo español](manual/ANDROMEDA-Manual-ES.pdf)
+📖 **Manual (PDF):** [English + Español](manual/ANDROMEDA-Manual-EN-ES.pdf) · [Solo español](manual/ANDROMEDA-Manual-ES.pdf) · **with the FM-1 / con el FM-1:** [EN + ES](manual/ANDROMEDA-Manual-Completo-EN-ES.pdf) · [ES](manual/ANDROMEDA-Manual-Completo-ES.pdf)
+
+🎛 **M-VAVE FM-1 firmware:** [drophlex/ANDROMEDAFM1](https://github.com/drophlex/ANDROMEDAFM1)
 
 ![ANDROMEDA](img/andromeda-main.jpg)
 
