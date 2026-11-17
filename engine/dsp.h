@@ -9,6 +9,7 @@ constexpr float PI = 3.14159265358979f, TAU = 6.28318530717958f;
 inline float clampf(float x, float a, float b) { return x < a ? a : x > b ? b : x; }
 inline int clampi(int x, int a, int b) { return x < a ? a : x > b ? b : x; }
 inline int maxi(int a, int b) { return a > b ? a : b; }
+inline int mini(int a, int b) { return a < b ? a : b; }
 inline float minf(float a, float b) { return a < b ? a : b; }
 inline float maxf(float a, float b) { return a > b ? a : b; }
 inline float absf(float x) { return __builtin_fabsf(x); }
@@ -41,7 +42,7 @@ struct SinTab { float t[2049]; SinTab() { // generated with a recursive oscillat
     float c = 1.f, s = 0.f, k = TAU / 2048.f; float ck = 1.f - k * k / 2.f + k * k * k * k / 24.f, sk = k - k * k * k / 6.f + k * k * k * k * k / 120.f;
     for (int i = 0; i <= 2048; i++) { t[i] = s; float ns = s * ck + c * sk, nc = c * ck - s * sk; s = ns; c = nc; if ((i & 255) == 255) { float n = 1.f / sqrtf_(s * s + c * c); s *= n; c *= n; } } } };
 inline const SinTab& sintab() { static SinTab T; return T; }
-inline float sinp(float ph) { ph -= floorf_(ph); float x = ph * 2048.f; int i = (int)x; float f = x - i; const float* t = sintab().t; return t[i] + (t[i + 1] - t[i]) * f; }
+inline float sinp(float ph) { ph -= floorf_(ph); float x = ph * 2048.f; int i = (int)x; if (i < 0) i = 0; if (i > 2047) i = 2047; float f = x - i; const float* t = sintab().t; return t[i] + (t[i + 1] - t[i]) * f; }
 inline float cosp(float ph) { return sinp(ph + 0.25f); }
 
 struct Rng { uint32_t s = 22222; float next() { s ^= s << 13; s ^= s >> 17; s ^= s << 5; return (float)(s >> 8) * (1.f / 16777216.f) * 2.f - 1.f; } float uni() { return next() * 0.5f + 0.5f; }

@@ -49,7 +49,7 @@ const Bridge = {
     if (window.__JUCE__ && window.__JUCE__.backend) return this.startPlugin();
     const AC = window.AudioContext || window.webkitAudioContext;
     const light = ENGINE_LIGHT();
-    try { this.ctx = new AC(light ? { latencyHint: 'playback', sampleRate: 44100 } : { latencyHint: 'playback' }); } catch (e) { this.ctx = new AC({ latencyHint: 'playback' }); }
+    try { this.ctx = new AC({ latencyHint: 'playback', sampleRate: light ? 44100 : 48000 });   // the engine runs at 44.1/48 kHz even if the interface is at 96 kHz } catch (e) { this.ctx = new AC({ latencyHint: 'playback' }); }
     const url = URL.createObjectURL(new Blob([WORKLET_CODE], { type: 'application/javascript' }));
     try { await this.ctx.audioWorklet.addModule(url); } catch (e) { await this.ctx.audioWorklet.addModule('data:application/javascript,' + encodeURIComponent(WORKLET_CODE)); }
     const wasm = Uint8Array.from(atob(WASM_B64), c => c.charCodeAt(0));

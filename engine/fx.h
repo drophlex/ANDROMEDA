@@ -74,11 +74,11 @@ struct SpaceTape {
 
 // ================================================================ COSMOS (8-line FDN hall)
 struct Cosmos {
-  static constexpr int N = 1 << 14; Delay<N> d[8]; float len[8], g[8]; OnePole damp[8]; Delay<1 << 15> pre; float sr = 48000; float size = .79f, dampV = .47f, preV = .24f, vol = .72f;
-  float apB[2][1200]; Allpass ap[2]; float lph = 0; Smooth sz; float lastSize = -1, lastDamp = -1;
+  static constexpr int N = 1 << 16; Delay<N> d[8]; float len[8], g[8]; OnePole damp[8]; Delay<1 << 16> pre; float sr = 48000; float size = .79f, dampV = .47f, preV = .24f, vol = .72f;
+  float apB[2][2600]; Allpass ap[2]; float lph = 0; Smooth sz; float lastSize = -1, lastDamp = -1;
   void init(float r) { sr = r; static const float base[8] = {29.7f, 37.1f, 41.1f, 43.7f, 50.3f, 57.1f, 63.7f, 71.3f};
     for (int i = 0; i < 8; i++) { len[i] = base[i]; g[i] = 0.8f; }
-    for (int i = 0; i < 2; i++) { for (int j = 0; j < 1200; j++) apB[i][j] = 0; ap[i].buf = apB[i]; ap[i].n = (int)((i ? 12.7f : 4.7f) * sr / 1000.f); ap[i].g = 0.65f; }
+    for (int i = 0; i < 2; i++) { for (int j = 0; j < 2600; j++) apB[i][j] = 0; ap[i].buf = apB[i]; ap[i].n = maxi(1, mini(2599, (int)((i ? 12.7f : 4.7f) * sr / 1000.f))); ap[i].g = 0.65f; }
     sz.time(0.8f, sr); sz.snap(size); update(); }
   void update() { float sc = 1.f + sz.v * 2.3f, rt = 1.2f + sz.v * 12.f, fc = 1800.f * powf_(6.7f, 1.f - dampV);
     for (int i = 0; i < 8; i++) { float dl = len[i] * sc / 1000.f; g[i] = minf(0.97f, powf_(10.f, -3.f * dl / rt)); damp[i].setLP(fc, sr); } }
