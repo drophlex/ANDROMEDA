@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ANDROMEDA · an ambient instrument · quick guide</title>
+<meta name="description" content="ANDROMEDA: a free, open-source ambient instrument for the web, Mac (app, VST3, AU) and the M-VAVE FM-1. Quick guide, downloads and manuals.">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Inter+Tight:wght@300;400;500;600&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0d0b0a;--bg2:#15110f;--card:#1a1512;--line:#2c241f;--text:#ece4d8;--dim:#a39686;--amber:#f2c879;--copper:#c98a55;--star:#93b3c2;--rose:#d58a8a}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--text);font:400 16px/1.65 'Inter Tight',system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+a{color:var(--amber)}
+.wrap{max-width:1080px;margin:0 auto;padding:0 22px}
+nav{position:sticky;top:0;z-index:10;background:rgba(13,11,10,.82);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+nav .wrap{display:flex;align-items:center;gap:18px;height:54px}
+nav .logo{font:300 17px 'Cormorant Garamond',serif;letter-spacing:.45em;color:var(--text);text-decoration:none}
+nav .sp{flex:1}
+nav a.l{color:var(--dim);text-decoration:none;font-size:13px;letter-spacing:.06em}
+nav a.l:hover{color:var(--text)}
+.pill{display:inline-flex;align-items:center;gap:5px;font:600 11px/1 'Inter Tight';letter-spacing:.12em;text-transform:uppercase;border:1px solid var(--line);border-radius:99px;padding:6px 11px;color:var(--dim);background:none;cursor:pointer;text-decoration:none;white-space:nowrap}
+.pill b{color:var(--amber)}
+.don{color:var(--amber);border-color:rgba(242,200,121,.4)}
+.don:hover{background:rgba(242,200,121,.08)}
+header.hero{position:relative;overflow:hidden;padding:90px 0 40px;text-align:center}
+.hero canvas{position:absolute;inset:0;width:100%;height:100%;opacity:.55;pointer-events:none}
+.hero h1{position:relative;font:300 clamp(40px,8vw,88px)/1 'Cormorant Garamond',serif;letter-spacing:.5em;margin:0 0 0 .5em}
+.hero .tag{position:relative;font:italic 300 clamp(20px,3vw,28px) 'Cormorant Garamond',serif;color:var(--star);margin:16px 0 6px}
+.hero .cred{position:relative;font-size:11px;letter-spacing:.3em;color:var(--dim);text-transform:uppercase}
+.cta{position:relative;display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin:34px 0 0}
+.btn{display:inline-flex;align-items:center;gap:8px;padding:13px 20px;border-radius:12px;border:1px solid var(--line);background:var(--card);color:var(--text);text-decoration:none;font-weight:500;font-size:15px}
+.btn:hover{border-color:#4a3c33}
+.btn.prim{background:linear-gradient(#d39a62,#b9784a);color:#1b1310;border-color:#d39a62;font-weight:600}
+.shot{margin:46px auto 0;max-width:1000px;border-radius:16px;overflow:hidden;border:1px solid var(--line);box-shadow:0 30px 80px rgba(0,0,0,.55)}
+.shot img{display:block;width:100%}
+section{padding:70px 0;border-top:1px solid var(--line)}
+.kick{font:600 11px 'Inter Tight';letter-spacing:.32em;text-transform:uppercase;color:var(--copper);margin:0 0 10px}
+h2{font:300 clamp(30px,4.4vw,46px)/1.12 'Cormorant Garamond',serif;margin:0 0 14px}
+h2 i{color:var(--amber)}
+.lead{color:var(--dim);font-size:18px;max-width:760px;margin:0 0 34px}
+.grid{display:grid;gap:16px;grid-template-columns:repeat(auto-fit,minmax(230px,1fr))}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:20px 20px 18px}
+.card h3{font:400 24px/1.15 'Cormorant Garamond',serif;margin:0 0 6px;color:var(--text)}
+.card p{margin:0;color:var(--dim);font-size:14.5px}
+.card .ico{font-size:22px;margin-bottom:8px;display:block}
+ol.steps{list-style:none;padding:0;margin:0;counter-reset:s;display:grid;gap:14px}
+ol.steps li{counter-increment:s;display:grid;grid-template-columns:52px 1fr;gap:16px;align-items:start;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px}
+ol.steps li::before{content:counter(s);font:300 40px/1 'Cormorant Garamond',serif;color:var(--amber);text-align:center}
+ol.steps b{color:var(--text)}
+ol.steps p{margin:2px 0 0;color:var(--dim);font-size:15px}
+.k{display:inline-block;font:600 11px/1 'Inter Tight';letter-spacing:.08em;padding:4px 7px 3px;border-radius:6px;border:1px solid #4a3c33;background:#211a16;color:var(--text);vertical-align:1px}
+.k.a{border-color:#a26a3e;color:var(--amber)}
+.ways{display:grid;gap:16px;grid-template-columns:repeat(auto-fit,minmax(300px,1fr))}
+.way{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:24px;display:flex;flex-direction:column;gap:10px}
+.way h3{font:400 28px 'Cormorant Garamond',serif;margin:0}
+.way p,.way li{color:var(--dim);font-size:14.5px;margin:0}
+.way ol{margin:0;padding-left:20px;display:grid;gap:4px}
+.way .btn{align-self:flex-start;margin-top:auto}
+.term{position:relative;font:400 12.5px/1.5 'JetBrains Mono',monospace;background:#090807;border:1px solid var(--line);border-radius:10px;padding:12px 70px 12px 14px;color:#e9d9bf;word-break:break-all}
+.term button{position:absolute;right:8px;top:8px;font:600 10px 'Inter Tight';letter-spacing:.1em;background:#211a16;border:1px solid #4a3c33;color:var(--dim);border-radius:7px;padding:5px 8px;cursor:pointer}
+.visions{display:grid;gap:12px;grid-template-columns:repeat(auto-fit,minmax(210px,1fr))}
+.visions figure{margin:0;border-radius:12px;overflow:hidden;border:1px solid var(--line);background:#e9e7e1}
+.visions img{display:block;width:100%;aspect-ratio:1;object-fit:cover}
+.visions figcaption{background:var(--card);color:var(--dim);font-size:13px;padding:9px 12px}
+.manuals{display:grid;gap:12px;grid-template-columns:repeat(auto-fit,minmax(240px,1fr))}
+.manuals a{display:flex;justify-content:space-between;gap:10px;align-items:center;text-decoration:none;color:var(--text);background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px 16px}
+.manuals a span{color:var(--dim);font-size:12px}
+.manuals a:hover{border-color:#4a3c33}
+.fm1{display:grid;gap:28px;grid-template-columns:1fr 1fr;align-items:center}
+.fm1 img{width:100%;border-radius:14px;border:1px solid var(--line)}
+@media (max-width:780px){.fm1{grid-template-columns:1fr}nav a.l{display:none}}
+.note{border-left:3px solid var(--copper);background:#17120f;padding:12px 16px;border-radius:0 10px 10px 0;color:var(--dim);font-size:14px;margin-top:16px}
+footer{border-top:1px solid var(--line);padding:46px 0 60px;text-align:center;color:var(--dim);font-size:13px;line-height:2}
+footer .big{font:300 26px 'Cormorant Garamond',serif;letter-spacing:.42em;color:var(--text)}
+[data-es]{}
+</style>
+</head>
+<body>
+<nav><div class="wrap">
+  <a class="logo" href="#">ANDROMEDA</a>
+  <a class="l" href="#what" data-en="What it is" data-es="Qué es">What it is</a>
+  <a class="l" href="#guide" data-en="Quick guide" data-es="Guía rápida">Quick guide</a>
+  <a class="l" href="#get" data-en="Get it" data-es="Descárgalo">Get it</a>
+  <a class="l" href="#fm1">FM-1</a>
+  <a class="l" href="#manuals" data-en="Manuals" data-es="Manuales">Manuals</a>
+  <span class="sp"></span>
+  <button class="pill" id="lang" title="Language / Idioma"><b>EN</b> · ES</button>
+  <a class="pill don" id="don" target="_blank" rel="noopener" href="https://www.paypal.com/donate/?business=drophlex%40gmail.com&amp;no_recurring=0&amp;item_name=ANDROMEDA&amp;currency_code=USD">♥ <span data-en="Donate" data-es="Donar">Donate</span></a>
+</div></nav>
+
+<header class="hero">
+  <canvas id="harm"></canvas>
+  <div class="wrap">
+    <h1>ANDROMEDA</h1>
+    <p class="tag" data-en="an ambient instrument" data-es="un instrumento ambient">an ambient instrument</p>
+    <p class="cred">Dark Funk Durcal design · Polaris Sound Lab · Mérida, Yucatán</p>
+    <div class="cta">
+      <a class="btn prim" href="../" data-en="▶ Play it now in your browser" data-es="▶ Tócalo ya en tu navegador">▶ Play it now in your browser</a>
+      <a class="btn" href="#get" data-en="⤓ Mac app · VST3 · AU" data-es="⤓ App Mac · VST3 · AU">⤓ Mac app · VST3 · AU</a>
+      <a class="btn" href="#fm1" data-en="🎛 M-VAVE FM-1 firmware" data-es="🎛 Firmware M-VAVE FM-1">🎛 M-VAVE FM-1 firmware</a>
+    </div>
+    <div class="shot"><img src="../img/andromeda-main.jpg" alt="ANDROMEDA"></div>
+  </div>
+</header>
+
+<section id="what"><div class="wrap">
+  <p class="kick" data-en="What it does" data-es="Qué hace">What it does</p>
+  <h2 data-en="Music that <i>breathes</i>, made in minutes." data-es="Música que <i>respira</i>, hecha en minutos.">Music that <i>breathes</i>, made in minutes.</h2>
+  <p class="lead" data-en="ANDROMEDA writes warm, floating, nostalgic ambient music: pads that breathe like old tape, choirs, music boxes, bells, soft drum machines, dust and wind. You don’t need music theory: every note is always in key, and the music keeps writing itself from what you give it." data-es="ANDROMEDA escribe música ambient cálida, flotante y nostálgica: pads que respiran como cinta vieja, coros, cajas de música, campanas, cajas de ritmo suaves, polvo y viento. No necesitas teoría musical: cada nota está siempre en tono y la música se sigue escribiendo sola a partir de lo que le das.">ANDROMEDA writes warm, floating, nostalgic ambient music: pads that breathe like old tape, choirs, music boxes, bells, soft drum machines, dust and wind. You don’t need music theory: every note is always in key, and the music keeps writing itself from what you give it.</p>
+  <div class="grid">
+    <div class="card"><span class="ico">✦</span><h3 data-en="13 moods, one press" data-es="13 estados, un botón">13 moods, one press</h3><p data-en="Pick DRIFT, GLASS, ABYSS… and ALIGN writes a whole piece: beat, bass, pad and bells, in key and in time." data-es="Elige DRIFT, GLASS, ABYSS… y ALINEAR escribe una pieza completa: ritmo, bajo, pad y campanas, en tono y a tiempo.">Pick DRIFT, GLASS, ABYSS… and ALIGN writes a whole piece: beat, bass, pad and bells, in key and in time.</p></div>
+    <div class="card"><span class="ico">∞</span><h3 data-en="AUTO keeps it growing" data-es="AUTO la hace crecer">AUTO keeps it growing</h3><p data-en="Variations of your own pattern every few bars, parts entering and leaving. BACK returns to yours." data-es="Variaciones de tu propio patrón cada pocos compases; las partes entran y salen. VOLVER regresa al tuyo.">Variations of your own pattern every few bars, parts entering and leaving. BACK returns to yours.</p></div>
+    <div class="card"><span class="ico">♪</span><h3 data-en="Play over it" data-es="Toca encima">Play over it</h3><p data-en="Any keyboard: a note outside the scale gently shifts the music to a new key on the next beat." data-es="Cualquier teclado: una nota fuera de la escala mueve la música con suavidad a otro tono en el siguiente tiempo.">Any keyboard: a note outside the scale gently shifts the music to a new key on the next beat.</p></div>
+    <div class="card"><span class="ico">◎</span><h3 data-en="Space Tape &amp; visions" data-es="Space Tape y visiones">Space Tape &amp; visions</h3><p data-en="A three-head tape echo with spring reverb, 16 effects, and mathematical art that moves with the sound." data-es="Un eco de cinta de tres cabezas con reverb de resorte, 16 efectos y arte matemático que se mueve con el sonido.">A three-head tape echo with spring reverb, 16 effects, and mathematical art that moves with the sound.</p></div>
+  </div>
+</div></section>
+
+<section id="guide"><div class="wrap">
+  <p class="kick" data-en="Quick guide" data-es="Guía rápida">Quick guide</p>
+  <h2 data-en="Your first piece in <i>five steps</i>" data-es="Tu primera pieza en <i>cinco pasos</i>">Your first piece in <i>five steps</i></h2>
+  <p class="lead" data-en="Works the same in the browser, the Mac app and the plug-in. The program is in English; the EN · ES button (top right) switches it to Spanish." data-es="Funciona igual en el navegador, la app de Mac y el plug-in. El programa está en inglés; el botón EN · ES (arriba a la derecha) lo cambia a español.">Works the same in the browser, the Mac app and the plug-in. The program is in English; the EN · ES button (top right) switches it to Spanish.</p>
+  <ol class="steps">
+    <li><div><b data-en="Open it and press ENTER." data-es="Ábrelo y presiona ENTER.">Open it and press ENTER.</b><p data-en="Browsers only allow sound after a click. Use Chrome on a computer for the best result." data-es="Los navegadores solo permiten sonido después de un clic. Usa Chrome en una computadora para el mejor resultado.">Browsers only allow sound after a click. Use Chrome on a computer for the best result.</p></div></li>
+    <li><div><b data-en="Choose a mood, press ALIGN SONG." data-es="Elige un estado y presiona ALIGN SONG.">Choose a mood, press ALIGN SONG.</b><p data-en='In the ✦ PLAY tab pick DRIFT, TIDAL, GLASS… then <span class="k a">ALIGN SONG</span>. A whole piece appears, in key.' data-es='En la pestaña ✦ PLAY elige DRIFT, TIDAL, GLASS… y luego <span class="k a">ALIGN SONG</span>. Aparece una pieza completa, en tono.'>In the ✦ PLAY tab pick DRIFT, TIDAL, GLASS… then <span class="k a">ALIGN SONG</span>. A whole piece appears, in key.</p></div></li>
+    <li><div><b data-en="Press PLAY and turn on ✦ AUTO." data-es="Presiona PLAY y enciende ✦ AUTO.">Press PLAY and turn on ✦ AUTO.</b><p data-en='<span class="k">▶ PLAY</span> (or the space bar) starts it. <span class="k a">✦ AUTO</span> keeps it changing by itself, slowly, forever.' data-es='<span class="k">▶ PLAY</span> (o la barra espaciadora) lo arranca. <span class="k a">✦ AUTO</span> lo mantiene cambiando solo, despacio, sin fin.'><span class="k">▶ PLAY</span> (or the space bar) starts it. <span class="k a">✦ AUTO</span> keeps it changing by itself, slowly, forever.</p></div></li>
+    <li><div><b data-en="Shape the sky." data-es="Dale forma al cielo.">Shape the sky.</b><p data-en="Turn the four macros at the bottom: DRIFT (tape wobble), HAZE (dust and blur), BLOOM (space), GRAVITY (dark or bright). Try SPACE TAPE and the FX pad." data-es="Gira las cuatro macros de abajo: DRIFT (ondulación de cinta), HAZE (polvo y desenfoque), BLOOM (espacio), GRAVITY (oscuro o brillante). Prueba SPACE TAPE y el pad de efectos.">Turn the four macros at the bottom: DRIFT (tape wobble), HAZE (dust and blur), BLOOM (space), GRAVITY (dark or bright). Try SPACE TAPE and the FX pad.</p></div></li>
+    <li><div><b data-en="Play, record, save." data-es="Toca, graba, guarda.">Play, record, save.</b><p data-en='Play on a MIDI keyboard or the computer keys Z–M. <span class="k">● REC</span> records a WAV; SONG &amp; FILES saves your piece (.andromeda) and exports MIDI.' data-es='Toca con un teclado MIDI o con las teclas Z–M de la computadora. <span class="k">● REC</span> graba un WAV; SONG &amp; FILES guarda tu pieza (.andromeda) y exporta MIDI.'>Play on a MIDI keyboard or the computer keys Z–M. <span class="k">● REC</span> records a WAV; SONG &amp; FILES saves your piece (.andromeda) and exports MIDI.</p></div></li>
+  </ol>
+  <div class="visions" style="margin-top:30px">
+    <figure><img src="../img/vision-cymatics.jpg" alt=""><figcaption data-en="Cymatics: sand on a plate, shaped by each chord" data-es="Cimática: arena en una placa, con la forma de cada acorde">Cymatics: sand on a plate, shaped by each chord</figcaption></figure>
+    <figure><img src="../img/vision-harmonograph.jpg" alt=""><figcaption data-en="Harmonograph: pendulums drawing the chord" data-es="Armonógrafo: péndulos que dibujan el acorde">Harmonograph: pendulums drawing the chord</figcaption></figure>
+    <figure><img src="../img/vision-attractor.jpg" alt=""><figcaption data-en="Attractor: chaos breathing with the bar" data-es="Atractor: caos que respira con el compás">Attractor: chaos breathing with the bar</figcaption></figure>
+    <figure><img src="../img/nebula-echo.jpg" alt=""><figcaption data-en="Space Tape: the three-head echo" data-es="Space Tape: el eco de tres cabezas">Space Tape: the three-head echo</figcaption></figure>
+  </div>
+</div></section>
+
+<section id="get"><div class="wrap">
+  <p class="kick" data-en="Get it — free" data-es="Descárgalo — gratis">Get it — free</p>
+  <h2 data-en="One instrument, <i>four places</i>" data-es="Un instrumento, <i>cuatro lugares</i>">One instrument, <i>four places</i></h2>
+  <div class="ways">
+    <div class="way"><h3>Web</h3><p data-en="Nothing to install. Computers, tablets and phones (Chrome recommended)." data-es="No se instala nada. Computadora, tablet y celular (se recomienda Chrome).">Nothing to install. Computers, tablets and phones (Chrome recommended).</p><a class="btn prim" href="../" data-en="▶ Open ANDROMEDA" data-es="▶ Abrir ANDROMEDA">▶ Open ANDROMEDA</a></div>
+    <div class="way"><h3 data-en="Mac app &amp; plug-in" data-es="App y plug-in para Mac">Mac app &amp; plug-in</h3>
+      <p data-en="Open Terminal (Applications › Utilities), paste this line and press Return. It installs the app, the VST3 and the AU, and unblocks them for macOS:" data-es="Abre Terminal (Aplicaciones › Utilidades), pega esta línea y presiona Enter. Instala la app, el VST3 y el AU, y los desbloquea para macOS:">Open Terminal (Applications › Utilities), paste this line and press Return. It installs the app, the VST3 and the AU, and unblocks them for macOS:</p>
+      <div class="term" id="cmd">curl -fsSL https://drophlex.github.io/ANDROMEDA/install.sh | bash<button data-en="COPY" data-es="COPIAR">COPY</button></div>
+      <p data-en='Or download the <a href="https://github.com/drophlex/ANDROMEDA/releases/latest/download/ANDROMEDA-mac.zip">zip</a> and right-click “Install ANDROMEDA.command” › Open.' data-es='O descarga el <a href="https://github.com/drophlex/ANDROMEDA/releases/latest/download/ANDROMEDA-mac.zip">zip</a> y haz clic derecho en “Install ANDROMEDA.command” › Abrir.'>Or download the <a href="https://github.com/drophlex/ANDROMEDA/releases/latest/download/ANDROMEDA-mac.zip">zip</a> and right-click “Install ANDROMEDA.command” › Open.</p></div>
+    <div class="way"><h3>Ableton Live</h3><ol>
+      <li data-en="Install with the line on the left." data-es="Instala con la línea de la izquierda.">Install with the line on the left.</li>
+      <li data-en="Live › Settings › Plug-Ins: turn on “Use VST3 Plug-In System Folders”, press Rescan." data-es="Live › Ajustes › Plug-Ins: activa “Usar carpetas de sistema VST3” y presiona Volver a escanear.">Live › Settings › Plug-Ins: turn on “Use VST3 Plug-In System Folders”, press Rescan.</li>
+      <li data-en="Drag Plug-Ins › Polaris Sound Lab › ANDROMEDA onto a MIDI track. It follows Live’s tempo." data-es="Arrastra Plug-Ins › Polaris Sound Lab › ANDROMEDA a una pista MIDI. Sigue el tempo de Live.">Drag Plug-Ins › Polaris Sound Lab › ANDROMEDA onto a MIDI track. It follows Live’s tempo.</li></ol>
+      <p data-en='Arturia KeyLab Essential 49 map: <a href="https://github.com/drophlex/ANDROMEDA/blob/main/installer/KeyLab-Essential-49.md">guide</a>.' data-es='Mapa para Arturia KeyLab Essential 49: <a href="https://github.com/drophlex/ANDROMEDA/blob/main/installer/KeyLab-Essential-49.md">guía</a>.'>Arturia KeyLab Essential 49 map: <a href="https://github.com/drophlex/ANDROMEDA/blob/main/installer/KeyLab-Essential-49.md">guide</a>.</p></div>
+  </div>
+  <div class="note" data-en="macOS says it “cannot be opened” or “is damaged”? It isn’t: it is free software without a paid Apple signature. The Terminal line above already fixes it; the manual explains it step by step." data-es="¿macOS dice que “no se puede abrir” o que “está dañado”? No lo está: es software libre sin firma pagada de Apple. La línea de Terminal de arriba ya lo resuelve; el manual lo explica paso a paso.">macOS says it “cannot be opened” or “is damaged”? It isn’t: it is free software without a paid Apple signature. The Terminal line above already fixes it; the manual explains it step by step.</div>
+</div></section>
+
+<section id="fm1"><div class="wrap fm1">
+  <div>
+    <p class="kick" data-en="Hardware" data-es="Hardware">Hardware</p>
+    <h2 data-en="Your M-VAVE FM-1, <i>dreaming</i>" data-es="Tu M-VAVE FM-1, <i>soñando</i>">Your M-VAVE FM-1, <i>dreaming</i></h2>
+    <p class="lead" style="margin-bottom:18px" data-en="A free firmware that adds six ANDROMEDA pages to the FM-1 (ALIGN, AUTO, KEYS, SKY, SPACE TAPE, VISION) and keeps everything it could do before. Installs from a web page in about five minutes, and the official firmware can always go back." data-es="Un firmware gratis que añade seis páginas ANDROMEDA al FM-1 (ALIGN, AUTO, KEYS, SKY, SPACE TAPE, VISION) y conserva todo lo que ya hacía. Se instala desde una página web en unos cinco minutos y siempre puedes regresar al firmware oficial.">A free firmware that adds six ANDROMEDA pages to the FM-1 (ALIGN, AUTO, KEYS, SKY, SPACE TAPE, VISION) and keeps everything it could do before. Installs from a web page in about five minutes, and the official firmware can always go back.</p>
+    <ol class="steps" style="gap:10px">
+      <li style="padding:12px"><div><b data-en="Connect" data-es="Conecta">Connect</b><p data-en="FM-1 charged, USB-C data cable, Chrome or Edge on a computer." data-es="FM-1 cargado, cable USB-C de datos, Chrome o Edge en una computadora.">FM-1 charged, USB-C data cable, Chrome or Edge on a computer.</p></div></li>
+      <li style="padding:12px"><div><b data-en="Install" data-es="Instala">Install</b><p data-en="Open the installer, allow MIDI, press Install. Don’t unplug while it writes." data-es="Abre el instalador, permite MIDI y presiona Instalar. No desconectes mientras escribe.">Open the installer, allow MIDI, press Install. Don’t unplug while it writes.</p></div></li>
+      <li style="padding:12px"><div><b data-en="Play" data-es="Toca">Play</b><p data-en="Go to ALIGN, choose a mood with K1, press OCT+, then PLAY. VISION › K4 (LANG) puts the screen in Spanish." data-es="Ve a ALIGN, elige un estado con K1, presiona OCT+ y luego PLAY. VISION › K4 (LANG) pone la pantalla en español.">Go to ALIGN, choose a mood with K1, press OCT+, then PLAY. VISION › K4 (LANG) puts the screen in Spanish.</p></div></li>
+    </ol>
+    <div class="cta" style="justify-content:flex-start;margin-top:20px">
+      <a class="btn prim" href="../fm1/" data-en="🎛 Open the FM-1 installer" data-es="🎛 Abrir el instalador del FM-1">🎛 Open the FM-1 installer</a>
+      <a class="btn" href="https://github.com/drophlex/ANDROMEDAFM1" data-en="Source &amp; releases" data-es="Código y versiones">Source &amp; releases</a>
+    </div>
+  </div>
+  <div><img src="../img/fm1-pages.png" alt="ANDROMEDA on the FM-1"></div>
+</div></section>
+
+<section id="manuals"><div class="wrap">
+  <p class="kick" data-en="Manuals (PDF)" data-es="Manuales (PDF)">Manuals (PDF)</p>
+  <h2 data-en="Everything, explained <i>from zero</i>" data-es="Todo, explicado <i>desde cero</i>">Everything, explained <i>from zero</i></h2>
+  <p class="lead" data-en="Written for someone who has never used music software: installing, the first song, every button, recipes and help. English and Spanish." data-es="Escritos para alguien que nunca ha usado software musical: instalar, la primera canción, cada botón, recetas y ayuda. Inglés y español.">Written for someone who has never used music software: installing, the first song, every button, recipes and help. English and Spanish.</p>
+  <div class="manuals">
+    <a href="../manual/ANDROMEDA-Manual-Completo-EN-ES.pdf"><b data-en="Complete manual · EN + ES" data-es="Manual completo · EN + ES">Complete manual · EN + ES</b><span data-en="web, Mac, Ableton + FM-1" data-es="web, Mac, Ableton + FM-1">web, Mac, Ableton + FM-1</span></a>
+    <a href="../manual/ANDROMEDA-Manual-Completo-ES.pdf"><b>Manual completo · ES</b><span>web, Mac, Ableton + FM-1</span></a>
+    <a href="../manual/ANDROMEDA-Manual-EN-ES.pdf"><b data-en="Web · Mac · Ableton" data-es="Web · Mac · Ableton">Web · Mac · Ableton</b><span>EN + ES</span></a>
+    <a href="../manual/ANDROMEDA-FM1-Manual-EN-ES.pdf"><b data-en="FM-1 firmware" data-es="Firmware FM-1">FM-1 firmware</b><span>EN + ES</span></a>
+  </div>
+</div></section>
+
+<section><div class="wrap" style="text-align:center">
+  <p class="kick" data-en="Free and open source" data-es="Gratis y de código abierto">Free and open source</p>
+  <h2 data-en="Yours to play, read, <i>change and share</i>" data-es="Tuyo para tocar, leer, <i>cambiar y compartir</i>">Yours to play, read, <i>change and share</i></h2>
+  <p class="lead" style="margin:0 auto 24px" data-en='ANDROMEDA costs nothing. The full source is on GitHub: the instrument and plug-in under AGPL-3.0 (<a href="https://github.com/drophlex/ANDROMEDA">drophlex/ANDROMEDA</a>), the FM-1 firmware under GPL-3.0 (<a href="https://github.com/drophlex/ANDROMEDAFM1">drophlex/ANDROMEDAFM1</a>). If it brings you good moments, a small donation helps keep it growing.' data-es='ANDROMEDA no cuesta nada. Todo el código está en GitHub: el instrumento y el plug-in bajo AGPL-3.0 (<a href="https://github.com/drophlex/ANDROMEDA">drophlex/ANDROMEDA</a>), el firmware del FM-1 bajo GPL-3.0 (<a href="https://github.com/drophlex/ANDROMEDAFM1">drophlex/ANDROMEDAFM1</a>). Si te regala buenos momentos, una pequeña donación ayuda a que siga creciendo.'>ANDROMEDA costs nothing. The full source is on GitHub: the instrument and plug-in under AGPL-3.0 (<a href="https://github.com/drophlex/ANDROMEDA">drophlex/ANDROMEDA</a>), the FM-1 firmware under GPL-3.0 (<a href="https://github.com/drophlex/ANDROMEDAFM1">drophlex/ANDROMEDAFM1</a>). If it brings you good moments, a small donation helps keep it growing.</p>
+  <a class="pill don" style="font-size:12px;padding:9px 16px" target="_blank" rel="noopener" href="https://www.paypal.com/donate/?business=drophlex%40gmail.com&amp;no_recurring=0&amp;item_name=ANDROMEDA&amp;currency_code=USD">♥ <span data-en="Donate with PayPal" data-es="Donar con PayPal">Donate with PayPal</span></a>
+</div></section>
+
+<footer><div class="wrap">
+  <div class="big">ANDROMEDA</div>
+  <div>Dark Funk Durcal design · <span data-en="created at" data-es="creado en">created at</span> <b style="color:var(--amber)">Polaris Sound Lab</b> · Mérida, Yucatán, México</div>
+  <div><a href="https://instagram.com/polaris.sound.lab">Instagram @polaris.sound.lab</a> · <a href="https://youtube.com/@PolarisSoundLab">YouTube @PolarisSoundLab</a></div>
+  <div style="font-size:11.5px;margin-top:10px" data-en="Plug-in built with JUCE. The FM-1 firmware is based on Felucca by Hügelton Instruments. VST is a trademark of Steinberg; Ableton and Live of Ableton AG; M-VAVE and FM-1 of their owners. ANDROMEDA is not affiliated with them." data-es="Plug-in hecho con JUCE. El firmware del FM-1 se basa en Felucca de Hügelton Instruments. VST es marca de Steinberg; Ableton y Live de Ableton AG; M-VAVE y FM-1 de sus dueños. ANDROMEDA no está afiliado a ellos.">Plug-in built with JUCE. The FM-1 firmware is based on Felucca by Hügelton Instruments. VST is a trademark of Steinberg; Ableton and Live of Ableton AG; M-VAVE and FM-1 of their owners. ANDROMEDA is not affiliated with them.</div>
+</div></footer>
+
+<script>
+let lang = 'en';
+try { if (localStorage.getItem('andromeda.lang') === 'es') lang = 'es'; } catch (e) {}
+function apply() {
+  document.documentElement.lang = lang;
+  document.querySelectorAll('[data-en]').forEach(el => { el.innerHTML = el.dataset[lang]; });
+  document.getElementById('lang').innerHTML = lang === 'es' ? 'EN · <b>ES</b>' : '<b>EN</b> · ES';
+}
+document.getElementById('lang').onclick = () => { lang = lang === 'es' ? 'en' : 'es'; try { localStorage.setItem('andromeda.lang', lang); } catch (e) {} apply(); };
+document.querySelector('#cmd button').onclick = e => { navigator.clipboard && navigator.clipboard.writeText('curl -fsSL https://drophlex.github.io/ANDROMEDA/install.sh | bash'); e.target.textContent = lang === 'es' ? 'COPIADO ✓' : 'COPIED ✓'; };
+apply();
+// a slow harmonograph behind the title
+(() => {
+  const c = document.getElementById('harm'), g = c.getContext('2d'); let t = 0;
+  const fit = () => { c.width = c.clientWidth * devicePixelRatio; c.height = c.clientHeight * devicePixelRatio; };
+  fit(); addEventListener('resize', fit);
+  const still = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  function frame() {
+    const W = c.width, H = c.height, s = Math.min(W, H) * .42; g.clearRect(0, 0, W, H);
+    g.strokeStyle = 'rgba(242,200,121,.35)'; g.lineWidth = devicePixelRatio * .7; g.beginPath();
+    for (let i = 0; i < 2600; i++) { const u = i * .02, d = Math.exp(-u * .018);
+      const x = W / 2 + s * 1.6 * d * (Math.sin(2.01 * u + t) * .6 + Math.sin(3 * u + 1.3) * .4), y = H / 2 + s * d * (Math.sin(3.003 * u + 2 * t) * .6 + Math.sin(2 * u + .4) * .4);
+      i ? g.lineTo(x, y) : g.moveTo(x, y); }
+    g.stroke(); t += .0025; if (!still) requestAnimationFrame(frame);
+  }
+  frame();
+})();
+</script>
+</body>
+</html>

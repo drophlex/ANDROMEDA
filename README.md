@@ -1,24 +1,50 @@
-# ANDROMEDA
+<h1 align="center">A N D R O M E D A</h1>
+<p align="center"><i>an ambient instrument · un instrumento ambient</i><br>
+Dark Funk Durcal design · Created at <b>Polaris Sound Lab</b>, Mérida, Yucatán, México<br>
+<a href="https://www.instagram.com/polaris.sound.lab/">Instagram @polaris.sound.lab</a> · <a href="https://www.youtube.com/@PolarisSoundLab">YouTube @PolarisSoundLab</a></p>
 
-**An ambient instrument.** *Un instrumento ambient.*
-Dark Funk Durcal design · Polaris Sound Lab
+<p align="center">
+<a href="https://drophlex.github.io/ANDROMEDA/"><b>▶ Play it in your browser</b></a> &nbsp;·&nbsp;
+<a href="https://drophlex.github.io/ANDROMEDA/guide/"><b>✦ Quick guide</b></a> &nbsp;·&nbsp;
+<a href="https://github.com/drophlex/ANDROMEDA/releases/latest/download/ANDROMEDA-mac.zip"><b>⤓ Mac app · VST3 · AU</b></a> &nbsp;·&nbsp;
+<a href="https://github.com/drophlex/ANDROMEDAFM1"><b>🎛 FM-1 firmware</b></a> &nbsp;·&nbsp;
+<a href="https://www.paypal.com/donate/?business=drophlex%40gmail.com&no_recurring=0&item_name=ANDROMEDA&currency_code=USD"><b>♥ Donate</b></a>
+</p>
 
-▶ **Web:** https://drophlex.github.io/ANDROMEDA/
-⤓ **Mac plug-in (VST3 · AU · App):** [ANDROMEDA-mac.zip](https://github.com/drophlex/ANDROMEDA/releases/latest/download/ANDROMEDA-mac.zip) — or install with one line in Terminal / o instala con una línea en Terminal:
+<p align="center"><img src="img/andromeda-main.jpg" width="900" alt="ANDROMEDA"></p>
+
+**Free and open source** (AGPL-3.0). The program is in **English**; the **EN · ES** button (top right) switches the web, the Mac app and the plug-in to **Spanish**. On the FM-1: VISION page › K4 (LANG). Manuals in English and Spanish.
+
+## ⚡ Quick guide
+
+1. **Open it** — [drophlex.github.io/ANDROMEDA](https://drophlex.github.io/ANDROMEDA/) in Chrome, press **ENTER**. (Mac app / Ableton: install below.)
+2. **Choose a mood** in ✦ PLAY (DRIFT, TIDAL, GLASS…) and press **ALIGN SONG**: a whole piece appears, always in key.
+3. **▶ PLAY**, then turn on **✦ AUTO**: the music keeps growing from your pattern, by itself.
+4. **Shape the sky** with DRIFT · HAZE · BLOOM · GRAVITY, play the SPACE TAPE and the FX pad.
+5. **Play over it** on a MIDI keyboard or the computer keys Z–M; **● REC** records a WAV, SONG & FILES saves your piece.
+
+### Install on Mac (app + VST3 + AU)
+
+Open **Terminal** (Applications › Utilities), paste this line, press Return. It installs everything and unblocks it for macOS:
 
 ```
 curl -fsSL https://drophlex.github.io/ANDROMEDA/install.sh | bash
 ```
 
-📖 **Manual (PDF):** [English + Español](manual/ANDROMEDA-Manual-EN-ES.pdf) · [Solo español](manual/ANDROMEDA-Manual-ES.pdf) · **with the FM-1 / con el FM-1:** [EN + ES](manual/ANDROMEDA-Manual-Completo-EN-ES.pdf) · [ES](manual/ANDROMEDA-Manual-Completo-ES.pdf)
+Or download [ANDROMEDA-mac.zip](https://github.com/drophlex/ANDROMEDA/releases/latest/download/ANDROMEDA-mac.zip) and right-click **Install ANDROMEDA.command › Open**.
+**Ableton Live:** Settings › Plug-Ins › turn on *VST3 Plug-In System Folders* › Rescan, then drag **ANDROMEDA** onto a MIDI track.
 
-🎛 **M-VAVE FM-1 firmware:** [drophlex/ANDROMEDAFM1](https://github.com/drophlex/ANDROMEDAFM1)
+### 📖 Manuals (PDF)
 
-![ANDROMEDA](img/andromeda-main.jpg)
+| | English + Español | Español |
+|---|---|---|
+| **Complete** (web, Mac, Ableton + FM-1) | [EN + ES](manual/ANDROMEDA-Manual-Completo-EN-ES.pdf) | [ES](manual/ANDROMEDA-Manual-Completo-ES.pdf) |
+| Web · Mac · Ableton | [EN + ES](manual/ANDROMEDA-Manual-EN-ES.pdf) | [ES](manual/ANDROMEDA-Manual-ES.pdf) |
+| FM-1 firmware | [EN + ES](manual/ANDROMEDA-FM1-Manual-EN-ES.pdf) | [ES](manual/ANDROMEDA-FM1-Manual-ES.pdf) |
 
 ---
 
-## English
+## English — what it is
 
 Warm, drifting, nostalgic ambient music: breathing pulse-width pads, choirs, music boxes, FM bells, bowed metal, lo-fi drum machines, dust and wind. **Everything is always in key.**
 
@@ -36,7 +62,7 @@ Download the zip above, unzip, right-click **Install ANDROMEDA.command → Open*
 
 ---
 
-## Español
+## Español — qué es
 
 Música ambient cálida, flotante y nostálgica. **Todo suena siempre en tono.**
 
@@ -54,3 +80,15 @@ Descarga el zip, descomprímelo, clic derecho en **Install ANDROMEDA.command →
 ---
 
 `engine/` C++ engine (same code in web as WebAssembly and in the plug-in) · `ui/` interface · `plugin/` JUCE wrapper · `tools/build_web.py` builds the web page.
+
+
+---
+
+## Open source · Código abierto
+
+ANDROMEDA is free: play it, read it, change it, share it under the **GNU AGPL-3.0** ([LICENSE](LICENSE)); the plug-in is built with JUCE (AGPL-3.0). The FM-1 firmware is GPL-3.0 ([drophlex/ANDROMEDAFM1](https://github.com/drophlex/ANDROMEDAFM1)).
+ANDROMEDA es gratis: tócalo, léelo, cámbialo y compártelo bajo la **GNU AGPL-3.0**.
+
+Build: `python3 tools/build_web.py` (web, needs clang + wasm-ld) · `plugin/` with CMake (JUCE 8 is fetched) · CI in `.github/workflows/build.yml` tests the plug-in with pluginval and auval.
+
+If ANDROMEDA brings you good moments / si ANDROMEDA te regala buenos momentos: **[♥ Donate with PayPal · Dona con PayPal](https://www.paypal.com/donate/?business=drophlex%40gmail.com&no_recurring=0&item_name=ANDROMEDA&currency_code=USD)**

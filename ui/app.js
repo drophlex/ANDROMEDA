@@ -12,7 +12,7 @@ const pstep = id => { const n = PARAM_META[id].steps; return n > 1 ? Math.round(
 const setP = (id, v) => { v = clamp(v, 0, 1); PARAMS[id] = v; Bridge.param(id, v); };
 const setPStep = (id, s) => setP(id, s / Math.max(1, PARAM_META[id].steps - 1));
 const MOOD_ES = { drift: 'sin batería, nubes flotando', tidal: 'pulso lento, ritmo cálido', haze: 'arpegios brillantes y nostálgicos, breakbeat', glass: 'arpegios de caja musical', pulse: 'sueños de pulse-width, bajo de goma', rust: 'drones oscuros, metales', breath: 'coros y suspiros largos', lullaby: 'melodía nostálgica, breaks lo-fi', orbit: 'polirritmos, braindance ligero', abyss: 'profundo y muy lento', chrome: 'metal frío, arco y gris', dawn: 'brillante, amanecer', static: 'fantasmas de radio' };
-const ES = { 'ENTER': 'ENTRAR', '◎ OBSERVATORY': '◎ OBSERVATORIO', 'SCENE': 'ESCENA', 'BAR': 'COMPÁS', 'Switch:': 'Cambiar:', 'SONG MODE': 'MODO CANCIÓN', '✦ PLAY': '✦ TOCAR', 'SOUND': 'SONIDO', 'FX & FILTERS': 'EFECTOS Y FILTROS', 'MIX': 'MEZCLA', 'SONG & FILES': 'CANCIÓN Y ARCHIVOS', 'INPUT · MIDI': 'ENTRADA · MIDI', 'HELP': 'AYUDA', 'Created at': 'Creado en',
+const ES = { 'DONATE': 'DONAR', 'free & open source': 'gratis y de código abierto', 'ENTER': 'ENTRAR', '◎ OBSERVATORY': '◎ OBSERVATORIO', 'SCENE': 'ESCENA', 'BAR': 'COMPÁS', 'Switch:': 'Cambiar:', 'SONG MODE': 'MODO CANCIÓN', '✦ PLAY': '✦ TOCAR', 'SOUND': 'SONIDO', 'FX & FILTERS': 'EFECTOS Y FILTROS', 'MIX': 'MEZCLA', 'SONG & FILES': 'CANCIÓN Y ARCHIVOS', 'INPUT · MIDI': 'ENTRADA · MIDI', 'HELP': 'AYUDA', 'Created at': 'Creado en',
   'an ambient instrument · cymatics · space tape': 'un instrumento ambient · cimática · space tape', 'MOOD': 'ESTADO', 'ALIGN SCENE': 'ALINEAR ESCENA', 'ALIGN SONG': 'ALINEAR CANCIÓN', 'AUTO': 'AUTO', 'AMOUNT': 'CANTIDAD', 'ENERGY': 'ENERGÍA', 'BACK TO MY PATTERN': 'VOLVER A MI PATRÓN', 'KEYS': 'TECLAS', 'RAW': 'LIBRE', 'SNAP': 'AJUSTAR', 'SHIFT': 'MODULAR',
   'RATE': 'VELOCIDAD', 'LENGTH': 'LARGO', 'NEW': 'NUEVO', 'VARY': 'VARIAR', 'CLEAR': 'BORRAR', 'FOLLOW CHORDS': 'SEGUIR ACORDES', 'CHORDS': 'ACORDES', 'GATE': 'DURACIÓN', 'VELOCITY': 'FUERZA', 'CHANCE': 'PROBABILIDAD', 'RATCHET': 'REPIQUE', 'OCTAVE': 'OCTAVA',
   'PRESETS': 'PRESETS', 'LISTEN': 'ESCUCHAR', 'MORE': 'MÁS', 'LESS': 'MENOS', 'DRUM KIT': 'KIT DE BATERÍA', 'TEXTURE': 'TEXTURA', 'ECHO': 'ECO', 'COSMOS REVERB': 'REVERB COSMOS', 'FREEZE': 'CONGELAR', 'TAPE STOP': 'TAPE STOP', 'SPIN': 'GIRAR', 'FILL': 'REDOBLE', 'SUPERNOVA': 'SUPERNOVA', 'ECLIPSE': 'ECLIPSE', 'SPRING KICK': 'GOLPE AL RESORTE',
@@ -346,8 +346,11 @@ async function midiInit() {
 }
 
 /* ================================================================= HELP */
+const DONATE_URL = 'https://www.paypal.com/donate/?business=drophlex%40gmail.com&no_recurring=0&item_name=ANDROMEDA&currency_code=USD';
+function openLink(url) { if (Bridge.kind === 'plugin') Bridge._call('openUrl', [url]); else window.open(url, '_blank', 'noopener'); }
 function uiHelp() {
   const T = $('#t-help'); T.innerHTML = '';
+  T.append(h('p', { class: 'hint', style: 'margin:0 0 10px' }, es() ? 'ANDROMEDA es gratis y de código abierto. Si te gusta, puedes apoyarlo con una donación: ' : 'ANDROMEDA is free and open source. If you enjoy it, you can support it with a donation: ', (() => { const b = h('a', { class: 'don', href: DONATE_URL }, '♥ PayPal'); b.onclick = e => { e.preventDefault(); openLink(DONATE_URL); }; return b; })(), ' · ', (() => { const u = 'https://github.com/drophlex/ANDROMEDA'; const b = h('a', { href: u, style: 'color:inherit' }, es() ? 'código fuente (AGPL-3.0)' : 'source code (AGPL-3.0)'); b.onclick = e => { e.preventDefault(); openLink(u); }; return b; })(), ' · ', (() => { const u = 'https://drophlex.github.io/ANDROMEDA/guide/'; const b = h('a', { href: u, style: 'color:inherit' }, es() ? 'guía rápida y manuales' : 'quick guide & manuals'); b.onclick = e => { e.preventDefault(); openLink(u); }; return b; })()));
   T.append(h3(es() ? 'EMPEZAR' : 'START'), h('ol', { class: 'hint', style: 'line-height:1.8' }, ...(es() ? ['Elige un ESTADO en ✦ TOCAR y presiona ALINEAR CANCIÓN.', 'Dibuja o cambia notas en la cuadrícula (todo está en tono).', 'Enciende ✦ AUTO: la música sigue sola a partir de tu patrón.', 'Toca encima con el teclado: con MODULAR, una nota fuera de escala cambia la escala con suavidad en el siguiente tiempo.', 'Juega con SPACE TAPE, los 16 EFECTOS Y FILTROS y las macros DERIVA · BRUMA · FLORECER · GRAVEDAD.']
     : ['Pick a MOOD in ✦ PLAY and press ALIGN SONG.', 'Draw or change notes in the grid (everything is in key).', 'Turn on ✦ AUTO: the music keeps going from your pattern.', 'Play over it on a keyboard: with SHIFT, a note outside the scale glides the scale on the next beat.', 'Play the SPACE TAPE, the 16 FX & FILTERS and the DRIFT · HAZE · BLOOM · GRAVITY macros.']).map(x => h('li', {}, x))));
   T.append(h3(es() ? 'TECLADO DE LA COMPU' : 'COMPUTER KEYS'), h('table', { class: 'map' }, ...[['SPACE', 'play / stop'], ['Z S X D C V G B H N J M , L . ; /', es() ? 'tocar en tono' : 'play in key'], ['1 … 8', es() ? 'elegir pista' : 'select track'], ['Q W E R T Y U I', es() ? 'escenas A–H' : 'scenes A–H'], ['A', 'AUTO'], ['O', 'FREEZE'], ['P', 'TAPE STOP'], ['[', 'SPIN'], [']', 'FILL'], ['\\', 'SUPERNOVA'], ["'", 'ECLIPSE'], ['K', 'SPRING KICK'], ['F', 'FX on/off'], ['`', es() ? 'observatorio' : 'observatory']].map(r => h('tr', {}, h('td', {}, r[0]), h('td', {}, r[1])))));
@@ -419,7 +422,7 @@ function frame(manual) {
   drawXY(); uiPerf();
 }
 function uiAll() { uiHeader(); uiScene(); uiMacros(); uiPerf(); uiTab(); applyLang(); drawKnobs(); }
-function applyLang() { $$('[data-i]').forEach(el => (el.textContent = tr_(el.dataset.i))); $('#langBtn').textContent = UI.lang === 'es' ? 'EN' : 'ES'; $('#ecoBtn').textContent = (es() ? 'MOTOR LIGERO' : 'LIGHT ENGINE') + (ENGINE_LIGHT() ? ' ✓' : ''); }
+function applyLang() { $$('[data-i]').forEach(el => (el.textContent = tr_(el.dataset.i))); $('#langBtn').innerHTML = UI.lang === 'es' ? 'EN · <b>ES</b>' : '<b>EN</b> · ES'; $('#ecoBtn').textContent = (es() ? 'MOTOR LIGERO' : 'LIGHT ENGINE') + (ENGINE_LIGHT() ? ' ✓' : ''); }
 
 /* ================================================================= keys */
 const KEYMAP = 'zsxdcvgbhnjm,l.;/'.split(''); const held = {};
@@ -468,7 +471,7 @@ function splashArt() { const c = $('#splashArt'); if (!c) return; const g = c.ge
   g.stroke(); g.fillStyle = '#964e2c'; g.beginPath(); g.arc(Z / 2, Z / 2, 5, 0, 6.283); g.fill(); }
 async function boot() {
   UI.vision = LS.get('andromeda.vision') || 'AUTO';
-  UI.lang = LS.get('andromeda.lang') || ((navigator.language || '').startsWith('es') ? 'es' : 'en'); applyLang(); splashArt();
+  UI.lang = LS.get('andromeda.lang') === 'es' ? 'es' : 'en';   // English unless ES was chosen applyLang(); splashArt();
   $$('#tabs button').forEach(b => (b.onclick = () => setTab(b.dataset.t)));
   $('#playBtn').onclick = () => Bridge.cmd(TR.playing ? CMD.STOP : CMD.PLAY);
   $('#bpmDn').onclick = () => setBpm(PJ.bpm - 1); $('#bpmUp').onclick = () => setBpm(PJ.bpm + 1); $('#tapBtn').onclick = tap;
@@ -479,6 +482,7 @@ async function boot() {
   $('#songBtn').onclick = () => { PJ.songOn = PJ.songOn ? 0 : 1; Bridge.cmd(CMD.SONG_ON, PJ.songOn); uiScene(); };
   $('#recBtn').onclick = () => { if (Bridge.kind !== 'web') return; REC.on = !REC.on; if (REC.on) { REC.L = []; REC.R = []; Bridge.record(true, (L, R) => { REC.L.push(...L); REC.R.push(...R); if (!REC.on) saveWav(REC.L, REC.R); }); toast('● REC'); } else { Bridge.record(false, (L, R) => { REC.L.push(...L); REC.R.push(...R); saveWav(REC.L, REC.R); }); } uiTransport(); };
   $('#obsBtn').onclick = toggleObs; $('#obsX').onclick = toggleObs;
+  ['#donBtn', '#donBtn2'].forEach(s => { const d = $(s); if (d) d.onclick = e => { e.preventDefault(); e.stopPropagation(); openLink(DONATE_URL); }; });
   $('#langBtn').onclick = () => { UI.lang = UI.lang === 'es' ? 'en' : 'es'; LS.set('andromeda.lang', UI.lang); uiAll(); };
   $('#ecoBtn').onclick = () => { if (Bridge.kind !== 'web') return; LS.set('andromeda.eco', ENGINE_LIGHT() ? '0' : '1'); saveLocal().then(() => location.reload()); };
   xyInit();

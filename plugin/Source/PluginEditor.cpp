@@ -47,6 +47,12 @@ juce::WebBrowserComponent::Options AndromedaEditor::makeOptions() {
       juce::Array<juce::var> list;
       for (int i = 0; i < proc.presetNames.size(); i++) { juce::DynamicObject::Ptr o2 = new juce::DynamicObject(); o2->setProperty("n", proc.presetNames[i]); o2->setProperty("cat", proc.presetCats[i]); list.add(juce::var(o2.get())); }
       done(list); })
+    .withNativeFunction("openUrl", [](const juce::Array<juce::var>& a, Completion done) {
+      // only the donation page and the project's pages open outside the plugin (the page cannot navigate the plugin's view away)
+      auto url = a.size() > 0 ? a[0].toString() : juce::String();
+      if (url.startsWith("https://www.paypal.com/donate/") || url.startsWith("https://github.com/drophlex/") || url.startsWith("https://drophlex.github.io/"))
+        juce::URL(url).launchInDefaultBrowser();
+      done(juce::var()); })
     .withNativeFunction("openAudioFile", [this](const juce::Array<juce::var>&, Completion done) {
       chooser = std::make_unique<juce::FileChooser>("Audio for ANDROMEDA", juce::File::getSpecialLocation(juce::File::userMusicDirectory), "*.wav;*.aif;*.aiff;*.flac;*.mp3;*.m4a;*.ogg");
       chooser->launchAsync(juce::FileBrowserComponent::openMode | juce::FileBrowserComponent::canSelectFiles, [this, done](const juce::FileChooser& fc) {
