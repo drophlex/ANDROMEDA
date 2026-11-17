@@ -64,14 +64,33 @@ function maybeRefresh(v) { if (v === projVersion) return; projVersion = v; if (U
 
 /* ---------------------------------------------------------------- header */
 function uiHeader() {
-  $('#bpmV').textContent = Math.round(PJ.bpm);
+  showBpm();
   const ks = $('#keySel'); if (!ks.options.length) KEYS.forEach((k, i) => ks.append(h('option', { value: i }, k))); ks.value = PJ.key;
   const ss = $('#scaleSel'); if (!ss.options.length) SCALES.forEach((s, i) => ss.append(h('option', { value: i }, s.n))); ss.value = PJ.scale;
   $('#autoBtn').classList.toggle('on', PARAMS[P.P_AUTO] > .5);
   uiTransport();
 }
 function uiTransport() { const b = $('#playBtn'); b.textContent = TR.playing ? '■ STOP' : '▶ PLAY'; b.classList.toggle('prim', !TR.playing); $('#recBtn').classList.toggle('on', REC.on); }
-function setBpm(v) { PJ.bpm = clamp(Math.round(v), 40, 180); $('#bpmV').textContent = PJ.bpm; Bridge.cmd(CMD.BPM10, PJ.bpm * 10); }
+// the tempo the user sets is the UI's until the engine has it (no stale telemetry in between): no skipped or stuck values
+const BPMS = { want: null, until: 0, host: false, hostBpm: 0 };
+function showBpm() {
+  const b = $('#bpmV'); if (!b) return;
+  const host = BPMS.host;
+  b.textContent = Math.round(host ? BPMS.hostBpm : PJ.bpm);
+  const box = b.closest('.bpm'); box.classList.toggle('host', host);
+  box.title = host ? (es() ? 'Mientras Ableton Live reproduce, ANDROMEDA sigue el tempo de Live: cámbialo en Live.' : 'While Ableton Live plays, ANDROMEDA follows Live\'s tempo: change it in Live.') : '';
+  const s = box.querySelector('small'); if (s) s.textContent = host ? 'LIVE' : 'BPM';
+}
+function setBpm(v) {
+  PJ.bpm = clamp(Math.round(v), 40, 180); BPMS.want = PJ.bpm; BPMS.until = performance.now() + 1500;
+  showBpm(); Bridge.cmd(CMD.BPM10, PJ.bpm * 10);
+}
+function teleBpm(tele) {
+  const own = tele.length > 46 && tele[46] > 0 ? tele[46] : tele[1], host = tele[45] > 0.5;
+  BPMS.host = host; BPMS.hostBpm = tele[1];
+  if (BPMS.want !== null) { if (Math.abs(own - BPMS.want) < 0.05 || performance.now() > BPMS.until) BPMS.want = null; else return; }
+  PJ.bpm = Math.round(own * 10) / 10;
+}
 let taps = []; function tap() { const n = performance.now(); taps = taps.filter(t => n - t < 2500); taps.push(n); if (taps.length >= 3) setBpm(60000 / ((taps[taps.length - 1] - taps[0]) / (taps.length - 1))); }
 
 /* ---------------------------------------------------------------- scenes + tracks */
@@ -392,7 +411,7 @@ function onTele(tele, scope, ev) {
   TELE = tele; for (let k = 0; k < 512; k++) { SCOPE.L[k] = scope[k * 2]; SCOPE.R[k] = scope[k * 2 + 1]; }
   const wasPlaying = TR.playing; TR.playing = tele[0] > .5; TR.barInScene = tele[2]; TR.chordIdx = tele[6]; TR.chord = tele[7]; TR.queued = tele[5]; for (let i = 0; i < 8; i++) TR.pos[i] = tele[16 + i];
   LIVE.freeze = tele[37] > .5; LIVE.eclipse = tele[38] > .5;
-  if (PJ) { if (PJ.cur !== tele[4]) { PJ.cur = tele[4]; uiScene(); if (UI.tab === 'play') uiPlay(); } if (PJ.key !== tele[8] || PJ.scale !== tele[9]) { PJ.key = tele[8]; PJ.scale = tele[9]; uiHeader(); $('.skybox').classList.remove('modflash'); void $('.skybox').offsetWidth; $('.skybox').classList.add('modflash'); if (UI.tab === 'play') uiPlay(); } PJ.bpm = tele[1]; }
+  if (PJ) { if (PJ.cur !== tele[4]) { PJ.cur = tele[4]; uiScene(); if (UI.tab === 'play') uiPlay(); } if (PJ.key !== tele[8] || PJ.scale !== tele[9]) { PJ.key = tele[8]; PJ.scale = tele[9]; uiHeader(); $('.skybox').classList.remove('modflash'); void $('.skybox').offsetWidth; $('.skybox').classList.add('modflash'); if (UI.tab === 'play') uiPlay(); } teleBpm(tele); if ((BPMS.n = (BPMS.n || 0) + 1) % 6 === 0) showBpm(); }
   if (wasPlaying !== TR.playing) uiTransport();
   const now = performance.now() / 1000;
   for (let k = 0; k < ev.length; k += 4) { const t = ev[k], a = ev[k + 1], b = ev[k + 2], c = ev[k + 3];

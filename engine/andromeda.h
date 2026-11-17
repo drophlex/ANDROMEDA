@@ -416,7 +416,7 @@ struct Engine {
     tele[8] = PJ.key; tele[9] = PJ.scale; tele[10] = (float)songIdx; tele[11] = sqrtf_(rmsL); tele[12] = sqrtf_(rmsR); tele[13] = sqrtf_(low); tele[14] = sqrtf_(high); tele[15] = st.T1;
     for (int i = 0; i < 8; i++) tele[24 + i] = T[i].flare;
     tele[32] = st.headLvl[0]; tele[33] = st.headLvl[1]; tele[34] = st.headLvl[2]; tele[35] = st.peak; tele[36] = inPeak; tele[37] = p(P_ST_FREEZE); tele[38] = eclipse; tele[39] = p(P_AUTO);
-    tele[40] = (float)projVersion; tele[41] = fx.on ? 1.f : 0.f; tele[42] = (float)pendKey; tele[43] = mst.spd; tele[44] = st.sprLvl;
+    tele[40] = (float)projVersion; tele[41] = fx.on ? 1.f : 0.f; tele[42] = (float)pendKey; tele[43] = mst.spd; tele[44] = st.sprLvl; tele[45] = hostSync ? 1.f : 0.f; tele[46] = PJ.bpm;
   }
 };
 
