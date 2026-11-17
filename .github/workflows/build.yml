@@ -1,0 +1,55 @@
+name: Build ANDROMEDA plugin (macOS)
+on:
+  push:
+    branches: [main]
+    paths: ['engine/**', 'plugin/**', 'ui/**', 'installer/**', '.github/workflows/build.yml']
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  mac:
+    runs-on: macos-14
+    steps:
+      - uses: actions/checkout@v4
+      - name: Configure (universal arm64 + x86_64)
+        run: cmake -S plugin -B build -G Xcode -DCMAKE_OSX_ARCHITECTURES="arm64;x86_64" -DCMAKE_OSX_DEPLOYMENT_TARGET=11.0
+      - name: Build VST3 + AU + Standalone
+        run: cmake --build build --config Release -j 4 -- -quiet
+      - name: Sign (ad-hoc) and package
+        run: |
+          set -e
+          A=build/Andromeda_artefacts/Release
+          mkdir -p pkg/ANDROMEDA
+          cp -R "$A/VST3/ANDROMEDA.vst3" pkg/ANDROMEDA/
+          cp -R "$A/AU/ANDROMEDA.component" pkg/ANDROMEDA/
+          cp -R "$A/Standalone/ANDROMEDA.app" pkg/ANDROMEDA/
+          for b in pkg/ANDROMEDA/*.vst3 pkg/ANDROMEDA/*.component pkg/ANDROMEDA/*.app; do codesign --force --deep -s - "$b"; done
+          cp installer/Install\ ANDROMEDA.command installer/LEEME.txt installer/README.txt installer/KeyLab-Essential-49.md pkg/ANDROMEDA/
+          chmod +x "pkg/ANDROMEDA/Install ANDROMEDA.command"
+          cd pkg && ditto -c -k --keepParent ANDROMEDA ../ANDROMEDA-mac.zip
+      - name: Validate with pluginval
+        run: |
+          curl -sSL -o pv.zip https://github.com/Tracktion/pluginval/releases/latest/download/pluginval_macOS.zip
+          unzip -q pv.zip
+          ./pluginval.app/Contents/MacOS/pluginval --strictness-level 8 --validate-in-process --skip-gui-tests --timeout-ms 300000 --validate build/Andromeda_artefacts/Release/VST3/ANDROMEDA.vst3
+      - name: Validate AU (auval)
+        run: |
+          mkdir -p ~/Library/Audio/Plug-Ins/Components
+          cp -R build/Andromeda_artefacts/Release/AU/ANDROMEDA.component ~/Library/Audio/Plug-Ins/Components/
+          killall -9 AudioComponentRegistrar || true
+          auval -v aumu Andr Plsl
+      - uses: actions/upload-artifact@v4
+        with:
+          name: ANDROMEDA-mac
+          path: ANDROMEDA-mac.zip
+      - name: Publish release "latest"
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: latest
+          name: ANDROMEDA for Mac (VST3 · AU · App)
+          prerelease: false
+          make_latest: true
+          files: ANDROMEDA-mac.zip
+          body: |
+            ANDROMEDA — an ambient instrument · Dark Funk Durcal design · Polaris Sound Lab
+            Download ANDROMEDA-mac.zip, unzip it and double-click "Install ANDROMEDA.command".

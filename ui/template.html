@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>ANDROMEDA · an ambient instrument</title>
+<meta name="description" content="ANDROMEDA: an ambient groovebox with a living sky chart, generative moods, a three-head tape echo and audio input. Created at Polaris Sound Lab.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23070915'/%3E%3Ccircle cx='32' cy='32' r='6' fill='%23f2b866'/%3E%3Cellipse cx='32' cy='32' rx='24' ry='10' fill='none' stroke='%237fd3e0' stroke-width='3' transform='rotate(-25 32 32)'/%3E%3C/svg%3E">
+<style>
+:root{--ink:#0d0b0a;--night:#141110;--deep:#1a1613;--panel:#1d1915;--line:#2f2823;--line2:#473c34;--star:#e8dfd2;--star2:#aca295;--dim:#776c62;--amber:#c98a55;--cyan:#93b3c2;--rose:#c4867e;--violet:#a99e8e;--red:#c0603f;--r:12px}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;background:var(--ink);color:var(--star);font:14px/1.35 "Inter Tight",ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+body{min-height:100vh;background-blend-mode:normal;background:radial-gradient(1200px 700px at 30% -10%,#2a211b 0,transparent 60%),radial-gradient(900px 600px at 110% 20%,#1f1712 0,transparent 55%),var(--ink)}
+button,select,input{font:inherit;color:inherit}
+button{background:linear-gradient(180deg,#241e19,#171310);border:1px solid var(--line2);border-radius:9px;padding:7px 11px;cursor:pointer;letter-spacing:.06em;font-size:12px;font-weight:600;text-transform:uppercase;transition:background .15s,border-color .15s,transform .05s}
+button:hover{border-color:#6b5a4c}button:active{transform:translateY(1px)}
+button.on{background:linear-gradient(180deg,#4a2f1f,#2f1e14);border-color:var(--amber);color:#f3d4b5}
+button.cy.on{background:linear-gradient(180deg,#1f3238,#152328);border-color:var(--cyan);color:#dcecf2}
+button.rose.on{background:linear-gradient(180deg,#43262a,#2a171a);border-color:var(--rose);color:#f3d6d2}
+button.big{padding:11px 16px;font-size:13px}
+button.prim{background:linear-gradient(180deg,#dba272,#b06f3f);color:#1a0f08;border-color:#e8b88a}
+button.prim:hover{filter:brightness(1.07)}
+select{background:#171310;border:1px solid var(--line2);border-radius:8px;padding:6px 8px;font-size:12px}
+input[type=number],input[type=text]{background:#120f0d;border:1px solid var(--line2);border-radius:8px;padding:6px 8px;width:70px}
+header{display:flex;align-items:center;gap:14px;padding:10px 16px;border-bottom:1px solid var(--line);position:sticky;top:0;z-index:20;background:rgba(13,11,10,.88);backdrop-filter:blur(10px);flex-wrap:wrap}
+.logo{display:flex;align-items:center;gap:10px;margin-right:6px}
+.logo svg{width:34px;height:34px}
+.logo h1{margin:0;font-size:18px;letter-spacing:.42em;font-weight:300}
+.logo small{display:block;font-size:11px;color:var(--star2);margin-top:2px;font-family:Georgia,serif;font-style:italic;letter-spacing:.04em}
+.tp{display:flex;align-items:center;gap:7px;flex-wrap:wrap}
+.tp .bpm{display:flex;align-items:center;gap:4px;background:#120f0d;border:1px solid var(--line2);border-radius:9px;padding:2px 4px}
+.tp .bpm b{font-size:18px;font-weight:600;min-width:46px;text-align:center;cursor:ns-resize;user-select:none;font-variant-numeric:tabular-nums}
+.tp .bpm small{font-size:9px;color:var(--dim);letter-spacing:.15em}
+.tp .bpm button{padding:3px 7px}
+#playBtn{min-width:76px}
+#recBtn.on{background:#5a1c1c;border-color:#ff7d6b;color:#ffd6cf;animation:blink 1s infinite}
+@keyframes blink{50%{opacity:.6}}
+.sp{flex:1}
+main{display:grid;grid-template-columns:minmax(320px,46vh) 1fr;gap:14px;padding:14px 16px;align-items:start}
+@media (min-width:1200px){main{grid-template-columns:min(48vw,62vh) 1fr}}
+@media (max-width:860px){main{grid-template-columns:1fr}}
+.skyw{position:sticky;top:72px}
+.skybox{position:relative;border-radius:18px;overflow:hidden;border:1px solid var(--line);box-shadow:0 30px 80px rgba(0,0,0,.6),0 0 0 1px rgba(255,255,255,.02) inset;aspect-ratio:1/1;background:#0a0807}
+#sky{width:100%;height:100%;display:block}
+.hud{position:absolute;inset:0;pointer-events:none;padding:12px 14px;display:flex;flex-direction:column;justify-content:space-between;font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:rgba(233,228,212,.8)}
+.hud .row{display:flex;justify-content:space-between;gap:8px}
+.hud b{color:var(--amber);font-weight:600}
+.skybox.light .hud{color:rgba(28,31,36,.78)}.skybox.light .hud b{color:#8a4524}.skybox.light .hud .big{color:#1d2126}
+.vis{display:flex;gap:5px;flex-wrap:wrap;margin-top:8px;align-items:center;font-size:11px;color:var(--star2)}.vis button{padding:5px 8px;font-size:10.5px}
+.serif{font-family:Georgia,'Times New Roman',serif;font-style:italic;letter-spacing:.02em;text-transform:none}
+.hud .big{font-size:26px;letter-spacing:.12em;color:var(--star);font-weight:300;text-transform:none}
+.scenes{display:grid;grid-template-columns:repeat(8,1fr);gap:6px;margin-top:10px}
+.scenes button{padding:9px 0;font-size:15px;font-weight:500;position:relative}
+.scenes button.cur{border-color:var(--amber);color:#f3d4b5;box-shadow:0 0 18px rgba(201,138,85,.25) inset}
+.scenes button.q{animation:blink .5s infinite;border-color:var(--cyan)}
+.scenes button.empty{opacity:.45}
+.scenes button i{position:absolute;left:50%;bottom:3px;width:14px;height:2px;margin-left:-7px;border-radius:2px;background:var(--cyan);opacity:0}
+.scenes button.cur i{opacity:1;background:var(--amber)}
+.under{display:flex;gap:6px;margin-top:8px;flex-wrap:wrap;align-items:center;font-size:11px;color:var(--star2)}
+.panel{background:linear-gradient(180deg,rgba(32,27,23,.92),rgba(20,17,15,.94));border:1px solid var(--line);border-radius:18px;min-height:300px;overflow:hidden}
+.tabs{display:flex;gap:2px;padding:8px 8px 0;flex-wrap:wrap;border-bottom:1px solid var(--line);background:rgba(0,0,0,.18)}
+.tabs button{border:none;background:none;border-radius:9px 9px 0 0;padding:9px 11px;color:var(--star2);font-size:11.5px}
+.tabs button.on{background:rgba(201,138,85,.1);color:var(--amber);box-shadow:inset 0 -2px 0 var(--amber)}
+.tab{padding:14px 16px 18px;display:none}
+.tab.on{display:block}
+h3{margin:6px 0 10px;font-size:11px;letter-spacing:.24em;color:var(--amber);font-weight:600;text-transform:uppercase;display:flex;align-items:center;gap:8px}
+h3:after{content:"";flex:1;height:1px;background:linear-gradient(90deg,var(--line2),transparent)}
+.hint{color:var(--star2);font-size:12px;margin:6px 0 10px;max-width:70ch}
+.row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.grp{display:flex;gap:6px;flex-wrap:wrap;align-items:flex-end;padding:10px;border:1px solid var(--line);border-radius:12px;background:rgba(0,0,0,.15);margin:0 8px 8px 0}
+.grp>em{width:100%;font-style:normal;font-size:9.5px;letter-spacing:.24em;color:var(--dim);text-transform:uppercase;margin-bottom:2px}
+.grps{display:flex;flex-wrap:wrap}
+.knob{width:58px;text-align:center;user-select:none;touch-action:none;cursor:ns-resize;position:relative}
+.knob svg{width:44px;height:44px;display:block;margin:0 auto}
+.knob .kb{fill:#110e0c;stroke:#3d342d;stroke-width:1.5}
+.knob .ka{fill:none;stroke:#342c26;stroke-width:3;stroke-linecap:round}
+.knob .kv{fill:none;stroke:var(--amber);stroke-width:3;stroke-linecap:round;filter:drop-shadow(0 0 3px rgba(201,138,85,.5))}
+.knob .kp{stroke:var(--star);stroke-width:2;stroke-linecap:round}
+.knob b{display:block;font-size:11px;font-weight:600;font-variant-numeric:tabular-nums;margin-top:-1px;color:var(--star)}
+.knob i{display:block;font-style:normal;font-size:9px;letter-spacing:.12em;color:var(--star2);text-transform:uppercase;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.knob.cy .kv{stroke:var(--cyan);filter:drop-shadow(0 0 3px rgba(147,179,194,.5))}
+.knob.ro .kv{stroke:var(--rose)}
+.knob.learn{outline:1px dashed var(--cyan);outline-offset:2px;border-radius:8px}
+.knob.lg{width:76px}.knob.lg svg{width:60px;height:60px}
+.moods{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:8px;margin-bottom:12px}
+.mood{text-align:left;padding:10px 12px;border-radius:12px;text-transform:none;letter-spacing:0;font-weight:400;line-height:1.25;min-height:62px}
+.mood b{display:block;letter-spacing:.2em;font-size:12px;font-weight:700;text-transform:uppercase;margin-bottom:3px}
+.mood span{font-size:11.5px;color:var(--star2)}
+.mood.on span{color:#efd5bb}
+.chips{display:flex;gap:5px;flex-wrap:wrap}
+.chips button{padding:5px 9px;font-size:11px}
+.tracks{display:grid;grid-template-columns:repeat(8,minmax(0,1fr));gap:6px}
+.trk{border:1px solid var(--line2);border-radius:11px;padding:7px 6px 6px;background:rgba(24,20,17,.85);cursor:pointer;position:relative;min-width:0}
+.trk.sel{border-color:var(--amber);background:rgba(60,40,26,.55)}
+.trk .nm{font-size:10.5px;letter-spacing:.06em;font-weight:700;display:flex;align-items:center;gap:6px;white-space:nowrap;overflow:hidden}
+.trk .dot{width:9px;height:9px;border-radius:50%;flex:none;box-shadow:0 0 0 2px rgba(255,255,255,.05)}
+.trk .gl{font-size:10px;color:var(--star2);margin:2px 0 5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.trk .ms{display:flex;gap:4px}
+.trk .ms button{flex:1;padding:3px 0;font-size:10px}
+.trk.muted{opacity:.55}
+.grid{display:grid;gap:4px;margin:8px 0}
+.cell{height:44px;border-radius:7px;border:1px solid var(--line);background:#110e0c;position:relative;cursor:pointer;font-size:10px;display:flex;align-items:flex-end;justify-content:center;padding-bottom:3px;color:var(--star2);user-select:none;touch-action:none}
+.cell.beat{border-color:var(--line2)}
+.cell.on{background:linear-gradient(180deg,var(--c,#c98a55),rgba(0,0,0,.2));color:#140e05;font-weight:700;border-color:transparent}
+.cell.on.lp{opacity:.62}
+.cell.now{box-shadow:0 0 0 2px var(--star) inset}
+.cell.selc{outline:2px solid var(--cyan);outline-offset:1px}
+.cell .vb{position:absolute;left:3px;right:3px;top:3px;height:3px;border-radius:2px;background:rgba(0,0,0,.35)}
+.cell .vb i{display:block;height:100%;background:rgba(255,255,255,.75);border-radius:2px}
+.cell.off-len{opacity:.25}
+.lane{display:grid;grid-template-columns:96px 1fr;gap:8px;align-items:center}
+.lane select{width:96px}
+.stepedit{display:flex;gap:10px;flex-wrap:wrap;align-items:flex-end;padding:10px;border:1px dashed var(--line2);border-radius:12px;margin-top:6px}
+.prog{display:flex;gap:6px;flex-wrap:wrap;align-items:center}
+.prog select{min-width:64px;font-size:13px}
+.presets{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:6px;margin:8px 0 12px}
+.presets button{text-transform:none;letter-spacing:.02em;font-weight:500;font-size:12px;text-align:left}
+.tapebox{border-radius:14px;overflow:hidden;border:1px solid #3a3226;box-shadow:0 18px 40px rgba(0,0,0,.5)}
+#tape{width:100%;display:block;aspect-ratio:56/21}
+.modes{display:grid;grid-template-columns:repeat(12,1fr);gap:4px;margin:10px 0}
+.modes button{padding:7px 0;font-size:12px}
+.modes small{display:block;font-size:8px;opacity:.7;letter-spacing:0}
+.mix{display:grid;grid-template-columns:repeat(8,minmax(78px,1fr));gap:8px;overflow-x:auto}
+.strip{border:1px solid var(--line);border-radius:12px;padding:8px 4px;text-align:center;background:rgba(0,0,0,.18);display:flex;flex-direction:column;align-items:center;gap:4px}
+.strip .nm{font-size:10px;letter-spacing:.14em;font-weight:700}
+.fader{writing-mode:vertical-lr;direction:rtl;height:120px;width:28px;accent-color:var(--amber)}
+.songl{display:flex;flex-direction:column;gap:6px;max-width:520px}
+.songl .it{display:flex;gap:8px;align-items:center;padding:6px 8px;border:1px solid var(--line);border-radius:10px}
+.songl .it.now{border-color:var(--amber)}
+.songl .it b{width:22px;color:var(--dim)}
+footer.live{position:sticky;bottom:0;z-index:15;background:rgba(13,11,10,.92);backdrop-filter:blur(12px);border-top:1px solid var(--line);padding:10px 16px calc(10px + env(safe-area-inset-bottom));display:grid;grid-template-columns:1fr auto auto;gap:14px;align-items:center}
+@media (max-width:1100px){footer.live{grid-template-columns:1fr}}
+@media (max-width:860px){footer.live{position:static}.tracks{grid-template-columns:repeat(4,minmax(0,1fr))}.skyw{position:static}.perf{grid-template-columns:repeat(4,1fr)}header{position:static}}
+.macros{display:flex;gap:4px}
+.perf{display:grid;grid-template-columns:repeat(4,auto);gap:6px}
+.perf button{padding:9px 10px;font-size:11px}
+#xy{width:150px;height:76px;border-radius:12px;border:1px solid var(--line2);background:radial-gradient(circle at 50% 50%,#2a221c,#110e0c);touch-action:none;cursor:crosshair;display:block}
+.toast{position:fixed;left:50%;top:76px;transform:translateX(-50%);background:rgba(36,29,24,.96);border:1px solid var(--amber);color:#f3d4b5;padding:9px 16px;border-radius:12px;z-index:100;font-size:12.5px;letter-spacing:.08em;opacity:0;transition:opacity .25s;pointer-events:none}
+.toast.on{opacity:1}
+#obs{position:fixed;inset:0;background:#000;z-index:200;display:none}
+#obs.on{display:block}
+#obsSky{width:100vw;height:100vh;display:block}
+#obs .ohud{position:absolute;left:24px;right:24px;bottom:22px;display:flex;justify-content:space-between;align-items:flex-end;letter-spacing:.3em;text-transform:uppercase;color:rgba(233,228,212,.75);font-size:12px;pointer-events:none}
+#obs .ohud b{font-size:30px;font-weight:200;letter-spacing:.5em;color:var(--star)}
+#obs .ox{position:absolute;right:18px;top:16px}
+#obs.light .ohud{color:rgba(28,31,36,.7)}#obs.light .ohud b{color:#1d2126}
+.fm1wrap{display:flex;gap:22px;flex-wrap:wrap;align-items:flex-start}
+.fm1dev{background:linear-gradient(160deg,#221c18,#100d0b);border:1px solid #4a3f36;border-radius:22px;padding:16px 18px 14px;box-shadow:0 20px 50px rgba(0,0,0,.7),inset 0 1px 0 rgba(255,255,255,.06);display:flex;flex-direction:column;align-items:center;gap:12px}
+#fm1c{width:min(72vw,288px);height:min(72vw,288px);image-rendering:pixelated;border-radius:6px;border:3px solid #050505;box-shadow:0 0 0 1px #4a3f36,0 0 30px rgba(147,179,194,.08)}
+.fm1k{display:flex;gap:6px}
+.kbd{display:inline-block;border:1px solid var(--line2);border-bottom-width:2px;border-radius:5px;padding:0 5px;font-size:11px;background:#120f0d;margin:0 1px}
+table.map{border-collapse:collapse;font-size:12px;max-width:560px}
+table.map td{border-bottom:1px solid var(--line);padding:6px 8px;vertical-align:top}
+table.map td:first-child{color:var(--amber);white-space:nowrap;letter-spacing:.08em}
+.foot{padding:18px 16px 30px;color:var(--dim);font-size:12px;text-align:center;letter-spacing:.06em}
+.foot a{color:var(--star2)}
+.meter{width:100%;height:6px;border-radius:4px;background:#110e0c;overflow:hidden;border:1px solid var(--line)}
+.meter i{display:block;height:100%;background:linear-gradient(90deg,var(--cyan),var(--amber),var(--red));width:0}
+.splash{position:fixed;inset:0;z-index:300;background:radial-gradient(circle at 50% 42%,#d9dad5,#9aa4a8 75%);color:#22262c;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:18px;text-align:center;padding:20px;cursor:pointer}
+.splash h2{font-weight:200;letter-spacing:.7em;font-size:clamp(26px,6vw,54px);margin:0 0 0 .7em}
+.splash p{color:#4a4f55;letter-spacing:.18em;font-size:12px;text-transform:uppercase;margin:0}
+.splash .go{margin-top:14px}
+.splash .credit{position:absolute;bottom:24px;font-size:11px;letter-spacing:.16em;color:#4a4f55;line-height:1.8}
+.splash .credit b{color:#22262c}
+.splash h2{color:#1e2227}
+</style>
+<style>
+.pr{display:grid;gap:3px;margin:8px 0;user-select:none}
+.pr .rl{font-size:10px;color:var(--star2);text-align:right;padding-right:6px;align-self:center;white-space:nowrap;font-variant-numeric:tabular-nums}
+.pr .c{height:22px;border-radius:5px;background:#120f0d;border:1px solid #241e19;cursor:pointer;position:relative}
+.pr .c.beat{background:#16120f}
+.pr .c.on{background:var(--c);border-color:transparent;box-shadow:0 0 10px -2px var(--c)}
+.pr .c.on.lp{opacity:.6}
+.pr .c.tail{background:color-mix(in srgb,var(--c) 35%,transparent);border-color:transparent}
+.pr .c.now{outline:1px solid var(--star);outline-offset:-1px}
+.pr .c.root{border-color:#3b3129}
+.pr .c.sel{outline:2px solid var(--cyan);outline-offset:0}
+.pr .c.off{opacity:.25}
+.autoc{display:flex;gap:12px;align-items:center;flex-wrap:wrap;padding:10px 12px;border:1px solid var(--line2);border-radius:14px;background:linear-gradient(180deg,rgba(201,138,85,.08),rgba(0,0,0,.15));margin:6px 0 12px}
+.autoc .big{font-size:14px;padding:11px 18px}
+.fxgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;max-width:620px}
+.fxgrid button{height:62px;font-size:12px;border-radius:12px;position:relative}
+.fxgrid button small{display:block;font-size:9px;opacity:.6;letter-spacing:.08em;margin-top:3px;font-weight:500}
+.fxgrid button.sel{border-color:var(--cyan)}
+.fxgrid button.live{background:linear-gradient(180deg,#5a3a22,#3a2414);border-color:var(--amber);color:#ffe2c0;box-shadow:0 0 22px rgba(201,138,85,.35)}
+#fxpad{width:min(100%,340px);aspect-ratio:1/1;border-radius:16px;border:1px solid var(--line2);background:radial-gradient(circle at 50% 50%,#2a221c,#110e0c);touch-action:none;cursor:crosshair;display:block}
+.tapepanel{display:flex;flex-wrap:wrap;gap:6px;align-items:flex-end;padding:14px;border-radius:14px;background:linear-gradient(180deg,#2b2720,#181512);border:1px solid #4a4036;margin-top:10px;box-shadow:inset 0 1px 0 rgba(255,255,255,.05)}
+.tapepanel .knob .kb{fill:#1a1714;stroke:#5a4e42}.tapepanel .knob .kv{stroke:#e4b06e}
+.tapepanel .knob i{color:#cbbfa9}
+.modesel{display:grid;grid-template-columns:repeat(6,1fr);gap:4px;margin:10px 0;max-width:520px}
+.modesel button{padding:8px 0;font-size:12px;background:linear-gradient(180deg,#2b2621,#1b1815);border-color:#4a4036}
+.modesel button.on{background:linear-gradient(180deg,#7a4a24,#4c2c15);border-color:#e4b06e;color:#fff1dc}
+.modesel small{display:block;font-size:8px;opacity:.75}
+.led{width:12px;height:12px;border-radius:50%;background:#3a1510;box-shadow:inset 0 0 3px #000;display:inline-block;vertical-align:middle;margin-left:4px}
+.led.on{background:#ff5a3c;box-shadow:0 0 10px #ff5a3c}
+.kmode button{padding:6px 10px}
+.prow{display:flex;gap:6px;align-items:center;flex-wrap:wrap;margin:4px 0 8px}
+.prow .lab{font-size:10px;color:var(--dim);letter-spacing:.14em;text-transform:uppercase}
+.pagebtn{padding:4px 8px}
+.badge{display:inline-block;padding:2px 7px;border-radius:999px;border:1px solid var(--line2);font-size:10px;letter-spacing:.1em;color:var(--star2)}
+.modflash{animation:mf 1.2s ease}
+@keyframes mf{0%{box-shadow:0 0 0 0 rgba(147,179,194,.9)}100%{box-shadow:0 0 0 22px rgba(147,179,194,0)}}
+</style>
+</head>
+<body>
+<div class="splash" id="splash">
+  <canvas id="splashArt" width="640" height="640" style="width:min(62vw,320px);height:min(62vw,320px)"></canvas>
+  <h2>ANDROMEDA</h2>
+  <p data-i="an ambient instrument · cymatics · space tape">an ambient instrument · cymatics · space tape</p>
+  <button class="prim big go" id="startBtn" data-i="ENTER">ENTER</button>
+  <div class="credit">an ambient instrument · <b>Dark Funk Durcal design</b> · <b>Polaris Sound Lab</b><br>Mérida, Yucatán, México · Instagram @polaris.sound.lab · YouTube @PolarisSoundLab</div>
+</div>
+<header>
+  <div class="logo"><svg viewBox="0 0 40 40" aria-hidden="true"><path d="M36.0 20.0 L36.0 20.5 L35.9 21.0 L35.8 21.5 L35.7 22.0 L35.6 22.5 L35.4 23.0 L35.1 23.5 L34.9 24.0 L34.6 24.5 L34.3 24.9 L33.9 25.4 L33.5 25.9 L33.1 26.4 L32.6 26.8 L32.2 27.3 L31.7 27.7 L31.1 28.1 L30.6 28.6 L30.0 29.0 L29.4 29.4 L28.8 29.8 L28.1 30.2 L27.5 30.6 L26.8 31.0 L26.1 31.3 L25.4 31.7 L24.7 32.0 L24.0 32.3 L23.2 32.6 L22.5 32.9 L21.8 33.2 L21.0 33.5 L20.3 33.8 L19.5 34.0 L18.7 34.3 L18.0 34.5 L17.2 34.7 L16.5 34.9 L15.8 35.1 L15.1 35.2 L14.3 35.4 L13.6 35.5 L13.0 35.6 L12.3 35.7 L11.6 35.8 L11.0 35.9 L10.4 35.9 L9.8 36.0 L9.2 36.0 L8.7 36.0 L8.2 36.0 L7.7 36.0 L7.2 35.9 L6.8 35.9 L6.4 35.8 L6.0 35.7 L5.6 35.6 L5.3 35.5 L5.0 35.4 L4.8 35.2 L4.6 35.1 L4.4 34.9 L4.2 34.7 L4.1 34.5 L4.0 34.3 L4.0 34.0 L4.0 33.8 L4.0 33.5 L4.1 33.2 L4.2 32.9 L4.3 32.6 L4.5 32.3 L4.7 32.0 L4.9 31.7 L5.2 31.3 L5.5 31.0 L5.9 30.6 L6.2 30.2 L6.6 29.8 L7.1 29.4 L7.5 29.0 L8.0 28.6 L8.5 28.1 L9.0 27.7 L9.6 27.3 L10.2 26.8 L10.8 26.4 L11.4 25.9 L12.1 25.4 L12.7 24.9 L13.4 24.5 L14.1 24.0 L14.8 23.5 L15.5 23.0 L16.3 22.5 L17.0 22.0 L17.7 21.5 L18.5 21.0 L19.2 20.5 L20.0 20.0 L20.8 19.5 L21.5 19.0 L22.3 18.5 L23.0 18.0 L23.7 17.5 L24.5 17.0 L25.2 16.5 L25.9 16.0 L26.6 15.5 L27.3 15.1 L27.9 14.6 L28.6 14.1 L29.2 13.6 L29.8 13.2 L30.4 12.7 L31.0 12.3 L31.5 11.9 L32.0 11.4 L32.5 11.0 L32.9 10.6 L33.4 10.2 L33.8 9.8 L34.1 9.4 L34.5 9.0 L34.8 8.7 L35.1 8.3 L35.3 8.0 L35.5 7.7 L35.7 7.4 L35.8 7.1 L35.9 6.8 L36.0 6.5 L36.0 6.2 L36.0 6.0 L36.0 5.7 L35.9 5.5 L35.8 5.3 L35.6 5.1 L35.4 4.9 L35.2 4.8 L35.0 4.6 L34.7 4.5 L34.4 4.4 L34.0 4.3 L33.6 4.2 L33.2 4.1 L32.8 4.1 L32.3 4.0 L31.8 4.0 L31.3 4.0 L30.8 4.0 L30.2 4.0 L29.6 4.1 L29.0 4.1 L28.4 4.2 L27.7 4.3 L27.0 4.4 L26.4 4.5 L25.7 4.6 L24.9 4.8 L24.2 4.9 L23.5 5.1 L22.8 5.3 L22.0 5.5 L21.3 5.7 L20.5 6.0 L19.7 6.2 L19.0 6.5 L18.2 6.8 L17.5 7.1 L16.8 7.4 L16.0 7.7 L15.3 8.0 L14.6 8.3 L13.9 8.7 L13.2 9.0 L12.5 9.4 L11.9 9.8 L11.2 10.2 L10.6 10.6 L10.0 11.0 L9.4 11.4 L8.9 11.9 L8.3 12.3 L7.8 12.7 L7.4 13.2 L6.9 13.6 L6.5 14.1 L6.1 14.6 L5.7 15.1 L5.4 15.5 L5.1 16.0 L4.9 16.5 L4.6 17.0 L4.4 17.5 L4.3 18.0 L4.2 18.5 L4.1 19.0 L4.0 19.5 L4.0 20.0 L4.0 20.5 L4.1 21.0 L4.2 21.5 L4.3 22.0 L4.4 22.5 L4.6 23.0 L4.9 23.5 L5.1 24.0 L5.4 24.5 L5.7 24.9 L6.1 25.4 L6.5 25.9 L6.9 26.4 L7.4 26.8 L7.8 27.3 L8.3 27.7 L8.9 28.1 L9.4 28.6 L10.0 29.0 L10.6 29.4 L11.2 29.8 L11.9 30.2 L12.5 30.6 L13.2 31.0 L13.9 31.3 L14.6 31.7 L15.3 32.0 L16.0 32.3 L16.8 32.6 L17.5 32.9 L18.2 33.2 L19.0 33.5 L19.7 33.8 L20.5 34.0 L21.3 34.3 L22.0 34.5 L22.8 34.7 L23.5 34.9 L24.2 35.1 L24.9 35.2 L25.7 35.4 L26.4 35.5 L27.0 35.6 L27.7 35.7 L28.4 35.8 L29.0 35.9 L29.6 35.9 L30.2 36.0 L30.8 36.0 L31.3 36.0 L31.8 36.0 L32.3 36.0 L32.8 35.9 L33.2 35.9 L33.6 35.8 L34.0 35.7 L34.4 35.6 L34.7 35.5 L35.0 35.4 L35.2 35.2 L35.4 35.1 L35.6 34.9 L35.8 34.7 L35.9 34.5 L36.0 34.3 L36.0 34.0 L36.0 33.8 L36.0 33.5 L35.9 33.2 L35.8 32.9 L35.7 32.6 L35.5 32.3 L35.3 32.0 L35.1 31.7 L34.8 31.3 L34.5 31.0 L34.1 30.6 L33.8 30.2 L33.4 29.8 L32.9 29.4 L32.5 29.0 L32.0 28.6 L31.5 28.1 L31.0 27.7 L30.4 27.3 L29.8 26.8 L29.2 26.4 L28.6 25.9 L27.9 25.4 L27.3 24.9 L26.6 24.5 L25.9 24.0 L25.2 23.5 L24.5 23.0 L23.7 22.5 L23.0 22.0 L22.3 21.5 L21.5 21.0 L20.8 20.5 L20.0 20.0 L19.2 19.5 L18.5 19.0 L17.7 18.5 L17.0 18.0 L16.3 17.5 L15.5 17.0 L14.8 16.5 L14.1 16.0 L13.4 15.5 L12.7 15.1 L12.1 14.6 L11.4 14.1 L10.8 13.6 L10.2 13.2 L9.6 12.7 L9.0 12.3 L8.5 11.9 L8.0 11.4 L7.5 11.0 L7.1 10.6 L6.6 10.2 L6.2 9.8 L5.9 9.4 L5.5 9.0 L5.2 8.7 L4.9 8.3 L4.7 8.0 L4.5 7.7 L4.3 7.4 L4.2 7.1 L4.1 6.8 L4.0 6.5 L4.0 6.2 L4.0 6.0 L4.0 5.7 L4.1 5.5 L4.2 5.3 L4.4 5.1 L4.6 4.9 L4.8 4.8 L5.0 4.6 L5.3 4.5 L5.6 4.4 L6.0 4.3 L6.4 4.2 L6.8 4.1 L7.2 4.1 L7.7 4.0 L8.2 4.0 L8.7 4.0 L9.2 4.0 L9.8 4.0 L10.4 4.1 L11.0 4.1 L11.6 4.2 L12.3 4.3 L13.0 4.4 L13.6 4.5 L14.3 4.6 L15.1 4.8 L15.8 4.9 L16.5 5.1 L17.2 5.3 L18.0 5.5 L18.7 5.7 L19.5 6.0 L20.3 6.2 L21.0 6.5 L21.8 6.8 L22.5 7.1 L23.2 7.4 L24.0 7.7 L24.7 8.0 L25.4 8.3 L26.1 8.7 L26.8 9.0 L27.5 9.4 L28.1 9.8 L28.8 10.2 L29.4 10.6 L30.0 11.0 L30.6 11.4 L31.1 11.9 L31.7 12.3 L32.2 12.7 L32.6 13.2 L33.1 13.6 L33.5 14.1 L33.9 14.6 L34.3 15.1 L34.6 15.5 L34.9 16.0 L35.1 16.5 L35.4 17.0 L35.6 17.5 L35.7 18.0 L35.8 18.5 L35.9 19.0 L36.0 19.5 L36.0 20.0" fill="none" stroke="#e8dfd2" stroke-width="1.1" opacity=".9"/><circle cx="20" cy="20" r="2.2" fill="#c98a55"/></svg><div><h1>ANDROMEDA</h1><small>an ambient instrument · Dark Funk Durcal design · Polaris Sound Lab</small></div></div>
+  <div class="tp">
+    <button id="playBtn" class="big prim">▶ PLAY</button>
+    <div class="bpm"><button id="bpmDn">−</button><div><b id="bpmV">80</b><small>BPM</small></div><button id="bpmUp">+</button></div>
+    <button id="tapBtn">TAP</button>
+    <select id="keySel" title="Key"></select><select id="scaleSel" title="Scale"></select>
+    <button id="autoBtn" class="cy big" title="AUTO: the music writes itself from your pattern">✦ AUTO</button>
+    <button id="recBtn" title="Record what you hear (WAV)">● REC</button>
+  </div>
+  <div class="sp"></div>
+  <div class="tp"><button id="ecoBtn" class="cy">LIGHT ENGINE</button><button id="obsBtn" class="cy" data-i="◎ OBSERVATORY">◎ OBSERVATORY</button><button id="langBtn">ES</button></div>
+</header>
+<main>
+  <section class="skyw">
+    <div class="skybox"><canvas id="sky"></canvas>
+      <div class="hud">
+        <div class="row"><span><span data-i="SCENE">SCENE</span> <b id="hScene">A</b></span><span id="hMood">DRIFT</span><span><span data-i="BAR">BAR</span> <b id="hBar">1</b></span></div>
+        <div class="row" style="align-items:flex-end"><span class="big" id="hChord">I</span><span id="hKey">D LYDIAN</span><span id="hSong"></span></div>
+      </div>
+    </div>
+    <div class="scenes" id="scenes"></div>
+    <div class="vis" id="visSel"></div>
+    <div class="under"><span data-i="Switch:">Switch:</span><span class="chips" id="quant"></span><span class="sp"></span><button id="songBtn" class="cy" data-i="SONG MODE">SONG MODE</button></div>
+  </section>
+  <section class="panel">
+    <nav class="tabs" id="tabs">
+      <button data-t="play" data-i="✦ PLAY">✦ PLAY</button>
+      <button data-t="snd" data-i="SOUND">SOUND</button>
+      <button data-t="tape" data-i="SPACE TAPE">SPACE TAPE</button>
+      <button data-t="fx" data-i="FX & FILTERS">FX & FILTERS</button>
+      <button data-t="mix" data-i="MIX">MIX</button>
+      <button data-t="song" data-i="SONG & FILES">SONG & FILES</button>
+      <button data-t="setup" data-i="INPUT · MIDI">INPUT · MIDI</button>
+      <button data-t="help" data-i="HELP">HELP</button>
+    </nav>
+    <div class="tab" id="t-play"></div>
+    <div class="tab" id="t-snd"></div>
+    <div class="tab" id="t-tape"><div class="tapebox"><canvas id="tape" width="1120" height="420"></canvas></div><div id="tapeCtl"></div></div>
+    <div class="tab" id="t-fx"></div>
+    <div class="tab" id="t-mix"></div>
+    <div class="tab" id="t-song"></div>
+    <div class="tab" id="t-setup"></div>
+    <div class="tab" id="t-help"></div>
+  </section>
+</main>
+<footer class="live">
+  <div class="tracks" id="tracks"></div>
+  <div class="row" style="gap:10px;flex-wrap:nowrap"><div class="macros" id="macros"></div><canvas id="xy" width="300" height="152" title="Hold and move"></canvas></div>
+  <div class="perf" id="perf"></div>
+</footer>
+<div class="foot">ANDROMEDA · an ambient instrument · <b>Dark Funk Durcal design</b> · <span data-i="Created at">Created at</span> <b>Polaris Sound Lab</b> · Mérida, Yucatán, México · <a href="https://www.instagram.com/polaris.sound.lab/" target="_blank" rel="noopener">Instagram @polaris.sound.lab</a> · <a href="https://www.youtube.com/@PolarisSoundLab" target="_blank" rel="noopener">YouTube @PolarisSoundLab</a></div>
+<div id="obs"><canvas id="obsSky"></canvas><div class="ohud"><span id="oL"></span><b>ANDROMEDA</b><span id="oR"></span></div><button class="ox" id="obsX">✕</button></div>
+<div class="toast" id="toast"></div>
+<script>
+/*JS*/
+</script>
+</body>
+</html>

@@ -1,0 +1,22 @@
+ANDROMEDA — un instrumento ambient · Dark Funk Durcal design · Polaris Sound Lab
+
+INSTALAR (Mac, Apple Silicon o Intel, macOS 11 o más nuevo)
+1. Descomprime ANDROMEDA-mac.zip.
+2. Clic derecho en "Install ANDROMEDA.command" → Abrir → Abrir.
+   Si macOS no te deja: Ajustes del Sistema → Privacidad y seguridad → baja hasta
+   "Install ANDROMEDA.command" → "Abrir de todos modos".
+   (O en Terminal:  xattr -dr com.apple.quarantine ~/Downloads/ANDROMEDA  y luego doble clic.)
+3. Abre Ableton Live → Ajustes → Plug-ins → activa "Usar carpetas de sistema de plug-ins VST3"
+   (o "Audio Units v2/v3") → Volver a escanear.
+4. En el Navegador: Plug-ins → Polaris Sound Lab → ANDROMEDA. Arrástralo a una pista MIDI.
+
+USARLO EN ABLETON
+- Dale play a Live: ANDROMEDA sigue el tempo y el compás de Live.
+- Sin play en Live también puedes usar el botón PLAY de ANDROMEDA.
+- Todo es automatizable: 74 parámetros en 10 bancos de 8 (PERFORM, SPACE TAPE, CINTA/COSMOS,
+  VOLÚMENES, ECO, COSMOS, SONIDO, FX, EXTRAS, PISTA).
+- Para pasar audio por ANDROMEDA (filtro): en el plug-in abre la sección Sidechain y elige la pista
+  de audio, o usa INPUT · MIDI → SUBIR AUDIO.
+- Arrastra el MIDI de una escena o canción (CANCIÓN Y ARCHIVOS → MIDI) a Live.
+
+Mira KeyLab-Essential-49.md para el controlador.

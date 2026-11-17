@@ -1,12 +1,10 @@
 # ANDROMEDA
 
-**An ambient instrument that lives in your browser.**
-*Un instrumento ambient que vive en tu navegador.*
+**An ambient instrument.** *Un instrumento ambient.*
+Dark Funk Durcal design · Polaris Sound Lab
 
-▶ **Try it / Pruébalo:** https://drophlex.github.io/ANDROMEDA/
-
-> 🧪 **Beta preview.** Still in progress: feedback is very welcome.
-> **Versión beta.** Todavía en desarrollo: tus comentarios son bienvenidos.
+▶ **Web:** https://drophlex.github.io/ANDROMEDA/
+⤓ **Mac plug-in (VST3 · AU · App):** [ANDROMEDA-mac.zip](https://github.com/drophlex/ANDROMEDA/releases/latest/download/ANDROMEDA-mac.zip)
 
 ![ANDROMEDA](img/andromeda-main.jpg)
 
@@ -14,63 +12,37 @@
 
 ## English
 
-ANDROMEDA makes warm, drifting, nostalgic ambient music: pads that breathe like old tape, choirs, music boxes, lo-fi drum machines, dust and wind. You don't need music theory, because **everything is always in key**.
+Warm, drifting, nostalgic ambient music: breathing pulse-width pads, choirs, music boxes, FM bells, bowed metal, lo-fi drum machines, dust and wind. **Everything is always in key.**
 
-### What it does
-- **10 moods**: DRIFT, TIDAL, GLASS, RUST, BREATH, LULLABY, ORBIT, ABYSS, DAWN, STATIC. Press **✦✦ ALIGN SONG** and it writes a whole song (intro, build, peak, breakdown, outro).
-- **8 tracks**: drums, bass, pad, voice, bells, lead, texture and your own **audio input**.
-- **Nebula Echo**: a three-head tape echo with 12 modes, spring reverb, wow & flutter, tape age, FREEZE and SPIN, and you can watch the tape run.
-- **Mathematical visuals that listen**: Chladni cymatics, a harmonograph drawn with the ratios of each chord, a Clifford strange attractor, a stereo scope, and an orrery.
-- **Live tools**: scenes A–H, song mode, the DRIFT / HAZE / BLOOM / GRAVITY macros, the nebula pad, TAPE STOP, SUPERNOVA, ECLIPSE, FILL, and EVOLVE (the music keeps changing by itself, forever).
-- **Input + looper**: run your mic, guitar or synth through the echo and the reverb, and loop it in time.
-- **MIDI** in and out, clock, MIDI learn, export to **.mid** and record to **WAV**.
-- Works offline, in English and Spanish, and saves your project automatically.
+- **Draw a pattern, then turn on ✦ AUTO**: ANDROMEDA keeps writing from *your* pattern (your intervals, your rhythms), always in key and in time, with parts fading in and out by ENERGY.
+- **Play over it on any keyboard.** KEYS = SHIFT: a note outside the scale glides the music to the nearest scale on the next beat; what you play becomes a motif the music answers.
+- **13 moods**, 53 sounds, 7 drum kits, 7 textures, scenes A–H, song mode.
+- **Space Tape**: three-head tape echo with the 12-position mode selector, repeat rate, intensity, bass, treble, input level with peak light, wow, flutter, tape age, spring reverb (kick it!), freeze, spin, tempo sync.
+- **16 FX & filters** that enter on the beat and leave with a fade: ladder, acid, MS, high sweep, band, vowel, envelope, notch, phaser, jet, ensemble, repeat, dust, half-speed, gate, metal. XY pad.
+- **Audio in**: mic, line, an audio file or (in the plug-in) a sidechain, through its own filter, the tape and the Cosmos reverb.
+- Every change is smooth: scenes on the bar, mutes with fades, effects on the 1/16.
+- MIDI in, pads, MIDI learn, export **.mid**, record **WAV**, save **.andromeda** (same file in web and plug-in).
 
-### Quick start
-1. Open the link and press **ENTER**: it starts playing.
-2. Choose a mood, press **✦✦ ALIGN SONG**.
-3. Move the macros, hold the **nebula pad**, try **FREEZE** and **SUPERNOVA**.
-4. Play the selected track with your keyboard: `Z S X D C V G B H N J M , L . ; /` (always in key).
-
-**Best in Chrome or Edge.** Safari works too (no MIDI there). On phones, the **LIGHT ENGINE** turns on by itself so the sound never breaks up. Headphones recommended.
+### Mac plug-in
+Download the zip above, unzip, right-click **Install ANDROMEDA.command → Open**. In Ableton: Settings → Plug-ins → VST3 system folders on → Rescan. It follows Live's tempo; 74 parameters in banks of 8 appear on any controller screen. Arturia KeyLab Essential 49 guide: [installer/KeyLab-Essential-49.md](installer/KeyLab-Essential-49.md).
 
 ---
 
 ## Español
 
-ANDROMEDA hace música ambient cálida, flotante y nostálgica: pads que respiran como cinta vieja, coros, cajas de música, cajas de ritmo lo-fi, polvo y viento. No necesitas saber teoría musical, porque **todo suena siempre en tono**.
+Música ambient cálida, flotante y nostálgica. **Todo suena siempre en tono.**
 
-### Qué hace
-- **10 estados de ánimo** (DRIFT, TIDAL, GLASS, RUST, BREATH, LULLABY, ORBIT, ABYSS, DAWN, STATIC). Con **✦✦ ALIGN SONG** escribe una canción completa (intro, subida, clímax, pausa, final).
-- **8 pistas**: batería, bajo, pad, coro, campanas, lead, textura y tu propia **entrada de audio**.
-- **Nebula Echo**: eco de cinta de tres cabezas con 12 modos, resorte, wow y flutter, desgaste de cinta, CONGELAR y GIRAR, y ves la cinta correr.
-- **Visuales matemáticos que escuchan**: cimática de Chladni, harmonógrafo con las proporciones de cada acorde, atractor de Clifford, osciloscopio estéreo y una carta astral.
-- **Para tocar en vivo**: escenas A–H, modo canción, las macros DERIVA / BRUMA / FLORECER / GRAVEDAD, el nebula pad, TAPE STOP, SUPERNOVA, ECLIPSE, FILL y EVOLVE (la música sigue cambiando sola).
-- **Entrada + looper**: pasa tu micrófono, guitarra o sinte por el eco y la reverb, y haz loops en tiempo.
-- **MIDI** de entrada y salida, reloj, MIDI learn, exportar a **.mid** y grabar en **WAV**.
-- Funciona sin internet, en inglés y español, y guarda tu proyecto solo.
+- **Dibuja un patrón y enciende ✦ AUTO**: ANDROMEDA sigue escribiendo a partir de *tu* patrón (tus intervalos, tus ritmos), siempre en tono y en tiempo; las partes entran y salen con fundido según la ENERGÍA.
+- **Toca encima con cualquier teclado.** TECLAS = MODULAR: una nota fuera de la escala lleva la música a la escala más cercana en el siguiente tiempo, y lo que tocas se vuelve un motivo al que la música contesta.
+- **13 estados**, 53 sonidos, 7 kits, 7 texturas, escenas A–H, modo canción.
+- **Space Tape**: eco de cinta de tres cabezas con el selector de 12 modos, velocidad, intensidad, graves, agudos, volumen de entrada con luz de pico, wow, flutter, desgaste, resorte (¡golpéalo!), congelar, girar y sincronía.
+- **16 efectos y filtros** que entran a tiempo y salen con fundido. Pad XY.
+- **Entrada de audio**: micrófono, línea, un archivo o (en el plug-in) sidechain.
+- Todo cambia suave: escenas al compás, silencios con fundido, efectos al 1/16.
 
-### Empezar
-1. Abre el link y presiona **ENTER** (en español, **ENTRAR**): empieza a sonar.
-2. Elige un estado y presiona **✦✦ ALIGN SONG**.
-3. Mueve las macros, mantén el **nebula pad**, prueba **FREEZE** y **SUPERNOVA**.
-4. Toca la pista seleccionada con el teclado: `Z S X D C V G B H N J M , L . ; /` (siempre en tono).
-
-**Mejor en Chrome o Edge.** También abre en Safari (ahí no hay MIDI). En celulares se activa solo el **LIGHT ENGINE** para que el sonido no se corte. Se recomienda usar audífonos.
+### Plug-in para Mac
+Descarga el zip, descomprímelo, clic derecho en **Install ANDROMEDA.command → Abrir**. En Ableton: Ajustes → Plug-ins → carpetas de sistema VST3 → Volver a escanear. Guía del KeyLab Essential 49: [installer/KeyLab-Essential-49.md](installer/KeyLab-Essential-49.md).
 
 ---
 
-| | |
-|---|---|
-| ![Cymatics](img/vision-cymatics.jpg) | ![Harmonograph](img/vision-harmonograph.jpg) |
-| ![Attractor](img/vision-attractor.jpg) | ![Mobile](img/mobile.jpg) |
-
----
-
-**Created at Polaris Sound Lab** · Mérida, Yucatán, México
-[Instagram @polaris.sound.lab](https://www.instagram.com/polaris.sound.lab/) · [YouTube @PolarisSoundLab](https://www.youtube.com/@PolarisSoundLab)
-
-Coming next: an ANDROMEDA firmware for the M-VAVE FM-1 and a VST3/AU plugin.
-*Próximamente: firmware de ANDROMEDA para el M-VAVE FM-1 y plugin VST3/AU.*
-
-© 2026 Polaris Sound Lab. All rights reserved.
+`engine/` C++ engine (same code in web as WebAssembly and in the plug-in) · `ui/` interface · `plugin/` JUCE wrapper · `tools/build_web.py` builds the web page.

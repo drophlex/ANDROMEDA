@@ -1,0 +1,7 @@
+engine/test/*
+!engine/test/*.cpp
+!engine/test/*.mjs
+build/
+pbuild/
+*.wav
+.DS_Store
