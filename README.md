@@ -4,7 +4,13 @@
 Dark Funk Durcal design · Polaris Sound Lab
 
 ▶ **Web:** https://drophlex.github.io/ANDROMEDA/
-⤓ **Mac plug-in (VST3 · AU · App):** [ANDROMEDA-mac.zip](https://github.com/drophlex/ANDROMEDA/releases/latest/download/ANDROMEDA-mac.zip)
+⤓ **Mac plug-in (VST3 · AU · App):** [ANDROMEDA-mac.zip](https://github.com/drophlex/ANDROMEDA/releases/latest/download/ANDROMEDA-mac.zip) — or install with one line in Terminal / o instala con una línea en Terminal:
+
+```
+curl -fsSL https://drophlex.github.io/ANDROMEDA/install.sh | bash
+```
+
+📖 **Manual (PDF):** [English + Español](manual/ANDROMEDA-Manual-EN-ES.pdf) · [Solo español](manual/ANDROMEDA-Manual-ES.pdf)
 
 ![ANDROMEDA](img/andromeda-main.jpg)
 
