@@ -16,7 +16,7 @@ const ES = { 'ENTER': 'ENTRAR', '◎ OBSERVATORY': '◎ OBSERVATORIO', 'SCENE': 
   'an ambient instrument · cymatics · space tape': 'un instrumento ambient · cimática · space tape', 'MOOD': 'ESTADO', 'ALIGN SCENE': 'ALINEAR ESCENA', 'ALIGN SONG': 'ALINEAR CANCIÓN', 'AUTO': 'AUTO', 'AMOUNT': 'CANTIDAD', 'ENERGY': 'ENERGÍA', 'BACK TO MY PATTERN': 'VOLVER A MI PATRÓN', 'KEYS': 'TECLAS', 'RAW': 'LIBRE', 'SNAP': 'AJUSTAR', 'SHIFT': 'MODULAR',
   'RATE': 'VELOCIDAD', 'LENGTH': 'LARGO', 'NEW': 'NUEVO', 'VARY': 'VARIAR', 'CLEAR': 'BORRAR', 'FOLLOW CHORDS': 'SEGUIR ACORDES', 'CHORDS': 'ACORDES', 'GATE': 'DURACIÓN', 'VELOCITY': 'FUERZA', 'CHANCE': 'PROBABILIDAD', 'RATCHET': 'REPIQUE', 'OCTAVE': 'OCTAVA',
   'PRESETS': 'PRESETS', 'LISTEN': 'ESCUCHAR', 'MORE': 'MÁS', 'LESS': 'MENOS', 'DRUM KIT': 'KIT DE BATERÍA', 'TEXTURE': 'TEXTURA', 'ECHO': 'ECO', 'COSMOS REVERB': 'REVERB COSMOS', 'FREEZE': 'CONGELAR', 'TAPE STOP': 'TAPE STOP', 'SPIN': 'GIRAR', 'FILL': 'REDOBLE', 'SUPERNOVA': 'SUPERNOVA', 'ECLIPSE': 'ECLIPSE', 'SPRING KICK': 'GOLPE AL RESORTE',
-  'DRIFT': 'DERIVA', 'HAZE': 'BRUMA', 'BLOOM': 'FLORECER', 'GRAVITY': 'GRAVEDAD' };
+  'KEEP SOUNDS': 'MANTENER SONIDOS', 'KEEP TEMPO': 'MANTENER TEMPO', 'KEEP KEY': 'MANTENER TONO', 'DRIFT': 'DERIVA', 'HAZE': 'BRUMA', 'BLOOM': 'FLORECER', 'GRAVITY': 'GRAVEDAD' };
 const tr_ = s => (UI.lang === 'es' && ES[s]) || s;
 const es = () => UI.lang === 'es';
 let toastT; function toast(m) { const t = $('#toast'); t.textContent = m; t.classList.add('on'); clearTimeout(toastT); toastT = setTimeout(() => t.classList.remove('on'), 2200); }
@@ -80,7 +80,7 @@ function uiScene() {
   'ABCDEFGH'.split('').forEach((L, n) => { const sc = PJ.scenes[n]; const b = h('button', { class: (n === PJ.cur ? 'cur ' : '') + (TR.queued === n ? 'q ' : '') + (sc.used ? '' : 'empty') }, L, h('i')); b.onclick = () => { Bridge.cmd(TR.playing ? CMD.QUEUE_SCENE : CMD.SET_SCENE_NOW, n); if (!TR.playing) { PJ.cur = n; uiAll(); } else TR.queued = n; uiScene(); }; box.append(b); });
   const vs = $('#visSel'); vs.innerHTML = ''; vs.append(h('span', { class: 'serif' }, es() ? 'visión' : 'vision'));
   VISIONS.forEach(v => vs.append(btn(v, () => { UI.vision = v; LS.set('andromeda.vision', v); uiScene(); }, 'cy', UI.vision === v)));
-  const q = $('#quant'); q.innerHTML = ''; [1, 2, 4].forEach(n => q.append(btn(n + (n > 1 ? ' bars' : ' bar'), () => { UI.quant = n; Bridge.cmd(CMD.QUANT, n); uiScene(); }, '', (UI.quant || 1) === n)));
+  const q = $('#quant'); q.innerHTML = ''; [1, 2, 4].forEach(n => q.append(btn(n + (es() ? (n > 1 ? ' compases' : ' compás') : (n > 1 ? ' bars' : ' bar')), () => { UI.quant = n; Bridge.cmd(CMD.QUANT, n); uiScene(); }, '', (UI.quant || 1) === n)));
   $('#songBtn').classList.toggle('on', !!PJ.songOn);
   uiTracks();
 }
@@ -104,7 +104,7 @@ function uiTab() { if (!PJ) return; ({ play: uiPlay, snd: uiSnd, tape: uiTape, f
 function uiPlay() {
   const T = $('#t-play'); T.innerHTML = '';
   // moods (one row) + align
-  const moods = h('div', { class: 'chips', style: 'margin-bottom:8px' }, ...MOODS.map((m, i) => { const b = btn(m.n, () => { PJ.mood = i; Bridge.cmd(CMD.MOOD, i); uiPlay(); }, '', PJ.mood === i, es() ? MOOD_ES[m.id] : m.d); b.ondblclick = () => Bridge.cmd(CMD.ALIGN, i, UI.keep, 0); return b; }));
+  const moods = h('div', { class: 'chips', style: 'margin-bottom:8px' }, ...MOODS.map((m, i) => { const b = btn(m.n, () => { PJ.mood = i; Bridge.cmd(CMD.MOOD, i); uiPlay(); }, '', PJ.mood === i, es() ? MOOD_ES[m.id] : m.d); b.ondblclick = () => Bridge.cmd(CMD.ALIGN, i, UI.keep, 0); b.textContent = m.n; delete b.dataset.i; return b; }));
   T.append(h('div', { class: 'prow' }, h('span', { class: 'lab' }, tr_('MOOD')), h('span', { class: 'hint', style: 'margin:0' }, es() ? MOOD_ES[MOODS[PJ.mood].id] : MOODS[PJ.mood].d)), moods);
   T.append(h('div', { class: 'row', style: 'margin-bottom:6px' },
     btn('ALIGN SCENE', () => { Bridge.cmd(CMD.ALIGN, PJ.mood, UI.keep, 0); toast(MOODS[PJ.mood].n); }, 'prim', false, es() ? 'escribe todas las partes de esta escena' : 'writes every part of this scene'),
