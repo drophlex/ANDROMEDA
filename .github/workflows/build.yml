@@ -42,11 +42,11 @@ jobs:
         with:
           name: ANDROMEDA-mac
           path: ANDROMEDA-mac.zip
-      - name: Publish release "latest"
+      - name: Publish release
         uses: softprops/action-gh-release@v2
         with:
-          tag_name: latest
-          name: ANDROMEDA for Mac (VST3 · AU · App)
+          tag_name: v1.0.${{ github.run_number }}
+          name: ANDROMEDA 1.0.${{ github.run_number }} for Mac (VST3 · AU · App)
           prerelease: false
           make_latest: true
           files: ANDROMEDA-mac.zip
