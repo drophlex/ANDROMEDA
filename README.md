@@ -3,7 +3,7 @@
 **An ambient instrument that lives in your browser.**
 *Un instrumento ambient que vive en tu navegador.*
 
-▶ **Try it / Pruébalo:** https://drophlex.github.io/andromeda
+▶ **Try it / Pruébalo:** https://drophlex.github.io/ANDROMEDA/
 
 > 🧪 **Beta preview.** Still in progress: feedback is very welcome.
 > **Versión beta.** Todavía en desarrollo: tus comentarios son bienvenidos.
