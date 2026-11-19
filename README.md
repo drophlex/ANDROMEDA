@@ -36,11 +36,15 @@ Or download [ANDROMEDA-mac.zip](https://github.com/drophlex/ANDROMEDA/releases/l
 
 ### 📖 Manuals (PDF)
 
-| | English + Español | Español |
-|---|---|---|
-| **Complete** (web, Mac, Ableton + FM-1) | [EN + ES](manual/ANDROMEDA-Manual-Completo-EN-ES.pdf) | [ES](manual/ANDROMEDA-Manual-Completo-ES.pdf) |
-| Web · Mac · Ableton | [EN + ES](manual/ANDROMEDA-Manual-EN-ES.pdf) | [ES](manual/ANDROMEDA-Manual-ES.pdf) |
-| FM-1 firmware | [EN + ES](manual/ANDROMEDA-FM1-Manual-EN-ES.pdf) | [ES](manual/ANDROMEDA-FM1-Manual-ES.pdf) |
+Illustrated, one for each edition:
+
+| Edition | English | Español | Both |
+|---|---|---|---|
+| 🎛 **Plug-in** (VST3 · AU · Mac app, Ableton Live) | [EN](manual/ANDROMEDA-VST-Manual-EN.pdf) | [ES](manual/ANDROMEDA-VST-Manual-ES.pdf) | [EN + ES](manual/ANDROMEDA-VST-Manual-EN-ES.pdf) |
+| 🌐 **Web** | [EN](manual/ANDROMEDA-Web-Manual-EN.pdf) | [ES](manual/ANDROMEDA-Web-Manual-ES.pdf) | [EN + ES](manual/ANDROMEDA-Web-Manual-EN-ES.pdf) |
+| 🪐 **M-VAVE FM-1** firmware | [EN](manual/ANDROMEDA-FM1-Manual-EN.pdf) | [ES](manual/ANDROMEDA-FM1-Manual-ES.pdf) | [EN + ES](manual/ANDROMEDA-FM1-Manual-EN-ES.pdf) |
+| Web · Mac · Ableton together | [EN](manual/ANDROMEDA-Manual-EN.pdf) | [ES](manual/ANDROMEDA-Manual-ES.pdf) | [EN + ES](manual/ANDROMEDA-Manual-EN-ES.pdf) |
+| Complete (with the FM-1) | | [ES](manual/ANDROMEDA-Manual-Completo-ES.pdf) | [EN + ES](manual/ANDROMEDA-Manual-Completo-EN-ES.pdf) |
 
 ---
 
