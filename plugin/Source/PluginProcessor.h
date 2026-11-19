@@ -37,6 +37,7 @@ public:
   void setProjectBytes(const void* data, int len);
   juce::StringArray presetNames, presetCats;
   bool loadAudioFile(const juce::File&);
+  juce::File renderLoop();                       // message thread: the current scene as a 4-bar WAV in a temporary folder
   // telemetry snapshot for the UI
   void snapshot(std::vector<float>& tele, std::vector<float>& scope, std::vector<int>& ev);
 

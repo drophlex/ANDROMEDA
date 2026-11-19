@@ -24,7 +24,7 @@ struct Engine {
   float sr = 48000; float params[P_COUNT]; Project PJ; TrackPat seed[8][8]; Rng rng; uint32_t seedCtr = 1;
   TrackRT T[8]; Texture tex; SpaceTape st; Cosmos cos; FxRack fx; Master mst;
   // transport
-  bool playing = false, hostSync = false; double hostPpq = 0; float hostBpm = 120; bool hostPlaying = false;
+  bool playing = false, hostSync = false; double hostPpq = 0; float hostBpm = 120; bool hostPlaying = false, ownPlay = false, hostWasP = false;
   long tick = 0, sceneT = 0; double toNext = 0; int barInScene = 0, chordIdx = 0, chordDeg = 0, queued = -1, quant = 1, songIdx = 0, songBar = 0;
   bool fill = false; long fillEnd = 0; int novaLeft = 0, novaLen = 0; float novaPh = 0; SVF novaF; float boom = 0, boomPh = 0; bool eclipse = false;
   int pendKey = -1, pendScale = -1; bool reharm = false; int motif[8]; int motifN = 0; int lastLive[128];
@@ -341,8 +341,11 @@ struct Engine {
   void controlBlock(int m) {
     // transport: find 16th boundaries inside this block
     if (hostSync) {
-      if (hostPlaying && !playing) { playing = true; double pos = hostPpq * 4.0; tick = (long)pos; sceneT = 0; toNext = (1.0 - (pos - tick)) * samplesPer16(); if (pos - tick < 1e-6) toNext = 0; }
-      if (!hostPlaying && playing) stop();
+      // like XO: ANDROMEDA's own PLAY/STOP are independent of the DAW. The DAW's play starts it (or lines it up) on the DAW's
+      // position; the DAW's stop stops it only if you didn't press PLAY yourself
+      if (hostPlaying && (!playing || !hostWasP)) { playing = true; double pos = hostPpq * 4.0; tick = (long)pos; sceneT = 0; toNext = (1.0 - (pos - tick)) * samplesPer16(); if (pos - tick < 1e-6) toNext = 0; }
+      if (!hostPlaying && playing && !ownPlay && hostWasP) stop();
+      hostWasP = hostPlaying;
     }
     if (playing) {
       while (toNext < m) { doTick(tick, (int)maxf(0, toNext)); tick++; toNext += samplesPer16(); }

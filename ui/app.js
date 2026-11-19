@@ -323,7 +323,8 @@ function uiSong() {
   for (let k = 0; k < PJ.songLen; k++) { const e = PJ.song[k]; const bars = h('input', { type: 'number', min: 1, max: 128, value: e.b }); bars.onchange = () => { e.b = clamp(+bars.value || 4, 1, 128); sendSong(); };
     list.append(h('div', { class: 'it' + (PJ.songOn && TR.playing && TELE[10] === k ? ' now' : '') }, h('b', {}, k + 1), sel('ABCDEFGH'.split(''), e.s, v => { e.s = +v; sendSong(); }), bars, es() ? 'compases' : 'bars', btn('✕', () => { PJ.song.splice(k, 1); PJ.song.push({ s: 0, b: 8 }); PJ.songLen--; sendSong(); uiSong(); }))); }
   T.append(list, h('div', { class: 'row', style: 'margin-top:8px' }, btn('+', () => { if (PJ.songLen < 32) { PJ.song[PJ.songLen] = { s: PJ.cur, b: 8 }; PJ.songLen++; sendSong(); uiSong(); } }), btn('SONG MODE', () => $('#songBtn').click(), 'cy', PJ.songOn)));
-  T.append(h3(es() ? 'EXPORTAR' : 'EXPORT'), h('div', { class: 'row' }, btn('⤓ MIDI ' + (es() ? 'ESCENA' : 'SCENE'), () => exportMidi(false)), btn('⤓ MIDI ' + (es() ? 'CANCIÓN' : 'SONG'), () => exportMidi(true)), Bridge.kind === 'web' ? btn('● REC WAV', () => $('#recBtn').click(), 'rose', REC.on) : ''));
+  T.append(h3(es() ? 'EXPORTAR' : 'EXPORT'), h('div', { class: 'row' }, ...(Bridge.kind === 'web' ? [btn('⤓ MIDI ' + (es() ? 'ESCENA' : 'SCENE'), () => exportMidi(false)), btn('⤓ MIDI ' + (es() ? 'CANCIÓN' : 'SONG'), () => exportMidi(true)), btn('● REC WAV', () => $('#recBtn').click(), 'rose', REC.on)]
+    : [dragBtn('⇱ MIDI ' + (es() ? 'ESCENA' : 'SCENE'), () => Bridge._call('dragFile', [midiName(false), b64u8(midiBytes(false))])), dragBtn('⇱ MIDI ' + (es() ? 'CANCIÓN' : 'SONG'), () => Bridge._call('dragFile', [midiName(true), b64u8(midiBytes(true))])), dragBtn('⇱ WAV', () => Bridge._call('dragWav', []))])));
   T.append(h3(es() ? 'PROYECTO' : 'PROJECT'));
   const fi = h('input', { type: 'file', accept: '.andromeda,application/octet-stream', style: 'display:none' });
   fi.onchange = async () => { const f = fi.files[0]; if (!f) return; const bytes = new Uint8Array(await f.arrayBuffer()); if (bytes[0] !== 65 || bytes[1] !== 78) { toast('?'); return; } Bridge.setProject(bytes); setTimeout(refreshProject, 100); toast(f.name); };
@@ -460,23 +461,37 @@ document.addEventListener('keyup', e => { const k = e.key.toLowerCase(); if (k =
 function toggleObs() { const o = $('#obs'); o.classList.toggle('on'); if (o.classList.contains('on')) { o.requestFullscreen && o.requestFullscreen().catch(() => {}); } else if (document.fullscreenElement) document.exitFullscreen(); }
 
 /* ================================================================= MIDI file export (from the patterns) */
-function exportMidi(song) {
+function midiBytes(song) {   // one track, one channel (1): every part together, as one MIDI track in the DAW expects
   const PPQ = 96, perStep = PPQ / 4, tracks = TRACKS.map(() => []), GM = [36, 38, 42, 46, 39, 37, 45, 56, 70, 76, 56];
   const list = song ? PJ.song.slice(0, PJ.songLen) : [{ s: PJ.cur, b: 8 }]; let k0 = 0;
   const stepIdx = (t, c) => { const L = t.len; if (t.dir === 1) return L - 1 - (c % L); if (t.dir === 2) { const Pp = Math.max(1, 2 * L - 2), x = c % Pp; return x < L ? x : Pp - x; } return c % L; };
   list.forEach(e => { const sc = PJ.scenes[e.s], total = e.b * 16;
     for (let kS = 0; kS < total; kS++) { const bar = Math.floor(kS / 16), cd = sc.prog[Math.floor(bar / Math.max(1, sc.cb)) % 4];
       for (let i = 0; i < 6; i++) { if (sc.mutes[i]) continue; const t = sc.tracks[i], rs = RATES[t.rate].s; if (kS % rs) continue; const st = stepIdx(t, kS / rs), t0 = (k0 + kS) * perStep;
-        if (i === 0) { t.lanes.forEach(ln => { const s = ln.steps[st]; if (s.on && s.prob >= 64) tracks[0].push([t0, 0x99, GM[ln.v], s.vel], [t0 + perStep / 2, 0x89, GM[ln.v], 0]); }); continue; }
+        if (i === 0) { t.lanes.forEach(ln => { const s = ln.steps[st]; if (s.on && s.prob >= 64) tracks[0].push([t0, 0x90, GM[ln.v], s.vel], [t0 + perStep / 2, 0x80, GM[ln.v], 0]); }); continue; }
         const s = t.steps[st]; if (!s.on || s.prob < 64) continue; const d = s.deg + (t.follow ? cd : 0); const notes = t.chord ? [d, d + 2, d + 4].map(x => degToMidi(i, x, t.oct + s.oct)) : [degToMidi(i, d, t.oct + s.oct)];
-        notes.forEach(m => tracks[i].push([t0, 0x90 | (i - 1), m, s.vel], [t0 + Math.max(1, Math.round(s.gate4 / 4 * rs * perStep * 0.97)), 0x80 | (i - 1), m, 0])); } }
+        notes.forEach(m => tracks[0].push([t0, 0x90, m, s.vel], [t0 + Math.max(1, Math.round(s.gate4 / 4 * rs * perStep * 0.97)), 0x80, m, 0])); } }
     k0 += total; });
   const vlq = n => { const b = [n & 0x7f]; while ((n >>= 7)) b.unshift((n & 0x7f) | 0x80); return b; }, str = s => [...s].map(c => c.charCodeAt(0) & 0x7f), chunks = [], tempo = Math.round(60000000 / PJ.bpm);
   chunks.push([0, 0xFF, 0x51, 3, (tempo >> 16) & 255, (tempo >> 8) & 255, tempo & 255, 0, 0xFF, 0x2F, 0]);
   tracks.forEach((ev, i) => { if (!ev.length) return; ev.sort((a, b) => a[0] - b[0] || (a[1] & 0xF0) - (b[1] & 0xF0)); const d = [0, 0xFF, 0x03, ...vlq(TRACKS[i].n.length), ...str(TRACKS[i].n)]; let last = 0; ev.forEach(e => { d.push(...vlq(e[0] - last), e[1], e[2] & 127, e[3] & 127); last = e[0]; }); d.push(0, 0xFF, 0x2F, 0); chunks.push(d); });
   const body = []; chunks.forEach(c => { const L = c.length; body.push(...str('MTrk'), (L >>> 24) & 255, (L >> 16) & 255, (L >> 8) & 255, L & 255, ...c); });
-  download(new Blob([new Uint8Array([...str('MThd'), 0, 0, 0, 6, 0, 1, 0, chunks.length, 0, PPQ, ...body])]), song ? 'andromeda-song.mid' : 'andromeda-scene.mid');
+  return new Uint8Array([...str('MThd'), 0, 0, 0, 6, 0, 1, 0, chunks.length, 0, PPQ, ...body]);
 }
+function midiName(song) { return (song ? 'ANDROMEDA-song-' : 'ANDROMEDA-scene-' + (PJ.cur + 1) + '-') + Math.round(PJ.bpm) + 'bpm.mid'; }
+function exportMidi(song) { download(new Blob([midiBytes(song)]), midiName(song)); }
+function b64u8(u) { let s = ''; for (let i = 0; i < u.length; i += 0x8000) s += String.fromCharCode.apply(null, u.subarray(i, i + 0x8000)); return btoa(s); }
+// in the plug-in the clips are dragged straight onto a track (MIDI from the patterns, WAV rendered by the plug-in)
+function dragBtn(label, fn) { const b = btn(label, () => {}); b.onpointerdown = e => { e.preventDefault(); fn(); toast(es() ? 'Arrástralo a una pista de tu DAW' : 'Drag it onto a track in your DAW'); }; return b; }
+// a MIDI clip dropped on ANDROMEDA: its key becomes ANDROMEDA's key and scale (the best match)
+function midiPitchClasses(buf) { const b = new Uint8Array(buf), pcs = new Array(12).fill(0); let run = 0;
+  for (let i = 14; i < b.length - 2; i++) { const st = b[i]; if ((st & 0xf0) === 0x90 && b[i + 1] < 128 && b[i + 2] > 0 && b[i + 2] < 128) { pcs[b[i + 1] % 12]++; i += 2; } }
+  return pcs; }
+function learnKey(pcs) { let best = [-1e9, 0, 0]; for (let r = 0; r < 12; r++) SCALES.forEach((sc, k) => { const set = sc.i.map(x => (x + r) % 12); let v = pcs[r] * .5 - set.length * .05; pcs.forEach((c, pc) => v += set.includes(pc) ? c : -2 * c); if (v > best[0]) best = [v, r, k]; });
+  PJ.key = best[1]; PJ.scale = best[2]; Bridge.cmd(CMD.KEY, PJ.key); Bridge.cmd(CMD.SCALE, PJ.scale); $('#keySel').value = PJ.key; $('#scaleSel').value = PJ.scale; uiTab();
+  toast((es() ? 'Del clip: ' : 'From the clip: ') + $('#keySel').selectedOptions[0].textContent + ' ' + SCALES[best[2]].n); }
+addEventListener('dragover', e => { if ([...(e.dataTransfer.items || [])].some(i => i.kind === 'file')) e.preventDefault(); });
+addEventListener('drop', async e => { const f = [...(e.dataTransfer.files || [])].find(x => /\.midi?$/i.test(x.name)); if (!f) return; e.preventDefault(); learnKey(midiPitchClasses(await f.arrayBuffer())); });
 function saveWav(chL, chR) {
   const n = chL.reduce((a, c) => a + c.length, 0), sr = Bridge.sampleRate, buf = new ArrayBuffer(44 + n * 4), dv = new DataView(buf); const ws = (o, s) => { for (let i = 0; i < s.length; i++) dv.setUint8(o + i, s.charCodeAt(i)); };
   ws(0, 'RIFF'); dv.setUint32(4, 36 + n * 4, true); ws(8, 'WAVE'); ws(12, 'fmt '); dv.setUint32(16, 16, true); dv.setUint16(20, 1, true); dv.setUint16(22, 2, true); dv.setUint32(24, sr, true); dv.setUint32(28, sr * 4, true); dv.setUint16(32, 4, true); dv.setUint16(34, 16, true); ws(36, 'data'); dv.setUint32(40, n * 4, true);

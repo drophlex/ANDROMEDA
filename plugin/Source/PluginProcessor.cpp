@@ -73,9 +73,8 @@ void AndromedaProcessor::processBlock(juce::AudioBuffer<float>& buffer, juce::Mi
   bool hp = false; double bpm = 120, ppq = 0;
   if (auto* ph = getPlayHead()) if (auto pos = ph->getPosition()) {
     hp = pos->getIsPlaying(); if (auto b = pos->getBpm()) bpm = *b; if (auto q = pos->getPpqPosition()) ppq = *q; }
-  if (hp || hostWasPlaying) { E.hostSync = true; E.hostPlaying = hp; E.hostBpm = (float)bpm; if (hp && !hostWasPlaying) E.hostPpq = ppq; }
-  else E.hostSync = false;
-  if (hp) E.hostBpm = (float)bpm;
+  // always the DAW's tempo (like XO); its play and stop are handled in the engine (own PLAY stays independent)
+  E.hostSync = true; E.hostPlaying = hp; E.hostBpm = (float)bpm; if (hp && !hostWasPlaying) E.hostPpq = ppq;
   hostWasPlaying = hp;
 
   // the engine runs at 44.1/48 kHz; at 88.2/96/176.4/192 kHz it runs at a half or a quarter and is interpolated up
@@ -182,3 +181,23 @@ void AndromedaProcessor::snapshot(std::vector<float>& tele, std::vector<float>& 
 
 juce::AudioProcessorEditor* AndromedaProcessor::createEditor() { return new AndromedaEditor(*this); }
 juce::AudioProcessor* JUCE_CALLTYPE createPluginFilter() { return new AndromedaProcessor(); }
+
+// the current scene as audio, for dragging onto a track: a fresh engine with the same project plays one bar first (so the
+// space and the delays are full), then 4 bars are kept
+juce::File AndromedaProcessor::renderLoop() {
+  auto R = std::make_unique<Engine>(); const float rate = 48000.f;
+  { const juce::SpinLock::ScopedLockType sl(lock); Engine& E = *eng;
+    R->init(rate); std::copy(E.params, E.params + P_COUNT, R->params); R->PJ = E.PJ; std::memcpy(R->seed, E.seed, sizeof(R->seed)); R->rng = E.rng;
+    R->hostSync = true; R->hostBpm = E.hostSync ? E.hostBpm : (float)E.PJ.bpm; R->hostPlaying = false; R->autoArr = false; }
+  R->play(); R->ownPlay = true;
+  const int bar = (int)std::round(rate * 60.0 / R->hostBpm * 4.0), len = bar * 4;
+  juce::AudioBuffer<float> out(2, len); float l[256], r[256]; int n = 0;
+  while (n < bar + len) { const int k = juce::jmin(256, bar + len - n); R->process(l, r, nullptr, nullptr, k);
+    for (int i = 0; i < k; i++) { const int j = n + i - bar; if (j >= 0) { out.setSample(0, j, l[i]); out.setSample(1, j, r[i]); } } n += k; }
+  auto dir = juce::File::getSpecialLocation(juce::File::tempDirectory).getChildFile("ANDROMEDA clips"); dir.createDirectory();
+  auto f = dir.getChildFile("ANDROMEDA scene " + juce::String(R->PJ.cur + 1) + " " + juce::String(juce::roundToInt(R->hostBpm)) + "bpm.wav"); f.deleteFile();
+  juce::WavAudioFormat wav;
+  if (auto os = std::unique_ptr<juce::OutputStream>(f.createOutputStream()))
+    if (auto w = std::unique_ptr<juce::AudioFormatWriter>(wav.createWriterFor(os.get(), rate, 2, 24, {}, 0))) { os.release(); w->writeFromAudioSampleBuffer(out, 0, len); }
+  return f;
+}

@@ -53,6 +53,19 @@ juce::WebBrowserComponent::Options AndromedaEditor::makeOptions() {
       if (url.startsWith("https://www.paypal.com/donate/") || url.startsWith("https://github.com/drophlex/") || url.startsWith("https://drophlex.github.io/"))
         juce::URL(url).launchInDefaultBrowser();
       done(juce::var()); })
+    .withNativeFunction("dragFile", [this](const juce::Array<juce::var>& a, Completion done) {
+      // a[0] file name (.mid), a[1] its bytes in base64: written to a temporary folder and dragged out onto a track
+      if (a.size() < 2) { done(false); return; }
+      juce::MemoryOutputStream mo; juce::Base64::convertFromBase64(mo, a[1].toString());
+      auto dir = juce::File::getSpecialLocation(juce::File::tempDirectory).getChildFile("ANDROMEDA clips"); dir.createDirectory();
+      auto f = dir.getChildFile(juce::File::createLegalFileName(a[0].toString()));
+      const bool ok = f.replaceWithData(mo.getData(), mo.getDataSize());
+      if (ok) juce::DragAndDropContainer::performExternalDragDropOfFiles({ f.getFullPathName() }, false, this);
+      done(ok); })
+    .withNativeFunction("dragWav", [this](const juce::Array<juce::var>&, Completion done) {
+      auto f = proc.renderLoop(); const bool ok = f.existsAsFile();
+      if (ok) juce::DragAndDropContainer::performExternalDragDropOfFiles({ f.getFullPathName() }, false, this);
+      done(ok); })
     .withNativeFunction("openAudioFile", [this](const juce::Array<juce::var>&, Completion done) {
       chooser = std::make_unique<juce::FileChooser>("Audio for ANDROMEDA", juce::File::getSpecialLocation(juce::File::userMusicDirectory), "*.wav;*.aif;*.aiff;*.flac;*.mp3;*.m4a;*.ogg");
       chooser->launchAsync(juce::FileBrowserComponent::openMode | juce::FileBrowserComponent::canSelectFiles, [this, done](const juce::FileChooser& fc) {

@@ -71,7 +71,7 @@ enum Cmd {
 inline void command(Engine& E, int op, const int* a) {
   Project& P = E.PJ; auto sc = [&](int s) -> Scene& { return P.scenes[s & 7]; };
   switch (op) {
-    case C_PLAY: E.play(); break; case C_STOP: E.stop(); break;
+    case C_PLAY: E.play(); E.ownPlay = true; break; case C_STOP: E.stop(); E.ownPlay = false; break;
     case C_BPM10: P.bpm = clampf(a[0] / 10.f, 30.f, 220.f); break;
     case C_KEY: P.key = (uint8_t)(((a[0] % 12) + 12) % 12); E.projVersion++; break;
     case C_SCALE: P.scale = (uint8_t)clampi(a[0], 0, NSCALES - 1); E.projVersion++; break;
