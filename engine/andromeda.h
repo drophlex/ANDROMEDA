@@ -343,8 +343,8 @@ struct Engine {
     if (hostSync) {
       // like XO: ANDROMEDA's own PLAY/STOP are independent of the DAW. The DAW's play starts it (or lines it up) on the DAW's
       // position; the DAW's stop stops it only if you didn't press PLAY yourself
-      if (hostPlaying && (!playing || !hostWasP)) { playing = true; double pos = hostPpq * 4.0; tick = (long)pos; sceneT = 0; toNext = (1.0 - (pos - tick)) * samplesPer16(); if (pos - tick < 1e-6) toNext = 0; }
-      if (!hostPlaying && playing && !ownPlay && hostWasP) stop();
+      // the DAW's play and stop never start or stop ANDROMEDA (only its own PLAY / STOP); when the DAW starts while it plays, it lines up
+      if (hostPlaying && playing && !hostWasP) { double pos = hostPpq * 4.0; tick = (long)pos; sceneT = 0; toNext = (1.0 - (pos - tick)) * samplesPer16(); if (pos - tick < 1e-6) toNext = 0; }
       hostWasP = hostPlaying;
     }
     if (playing) {
